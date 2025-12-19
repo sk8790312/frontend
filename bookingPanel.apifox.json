@@ -1,0 +1,1419 @@
+{
+  "apifoxProject": "1.0.0",
+  "$schema": {
+    "app": "apifox",
+    "type": "project",
+    "version": "1.2.0"
+  },
+  "info": {
+    "name": "bookingPanel",
+    "description": "",
+    "mockRule": {
+      "rules": [],
+      "enableSystemRule": true
+    }
+  },
+  "projectSetting": {
+    "id": "7613392",
+    "auth": {},
+    "securityScheme": {},
+    "gateway": [],
+    "language": "zh-CN",
+    "apiStatuses": [
+      "developing",
+      "testing",
+      "released",
+      "deprecated"
+    ],
+    "mockSettings": {},
+    "preProcessors": [],
+    "postProcessors": [],
+    "advancedSettings": {
+      "enableJsonc": false,
+      "enableBigint": false,
+      "responseValidate": true,
+      "enableTestScenarioSetting": false,
+      "enableYAPICompatScript": false,
+      "isDefaultUrlEncoding": 2,
+      "publishedDocUrlRules": {
+        "defaultRule": "RESOURCE_KEY_ONLY",
+        "resourceKeyStandard": "NEW"
+      }
+    },
+    "initialDisabledMockIds": [],
+    "servers": [
+      {
+        "id": "default",
+        "name": "默认服务",
+        "moduleId": 6774798
+      }
+    ],
+    "cloudMock": {
+      "security": "free",
+      "enable": false,
+      "tokenKey": "apifoxToken"
+    }
+  },
+  "apiCollection": [
+    {
+      "name": "根目录",
+      "id": 73954732,
+      "auth": {},
+      "securityScheme": {},
+      "parentId": 0,
+      "serverId": "",
+      "description": "",
+      "identityPattern": {
+        "httpApi": {
+          "type": "methodAndPath",
+          "bodyType": "",
+          "fields": []
+        }
+      },
+      "shareSettings": {},
+      "visibility": "SHARED",
+      "moduleId": 6774798,
+      "preProcessors": [
+        {
+          "id": "inheritProcessors",
+          "type": "inheritProcessors",
+          "data": {}
+        }
+      ],
+      "postProcessors": [
+        {
+          "id": "inheritProcessors",
+          "type": "inheritProcessors",
+          "data": {}
+        }
+      ],
+      "inheritPostProcessors": {},
+      "inheritPreProcessors": {},
+      "items": [
+        {
+          "name": "模块1： 订单管理模块",
+          "id": 73955839,
+          "auth": {},
+          "securityScheme": {},
+          "parentId": 0,
+          "serverId": "",
+          "description": "",
+          "identityPattern": {
+            "httpApi": {
+              "type": "inherit",
+              "bodyType": "",
+              "fields": []
+            }
+          },
+          "shareSettings": {},
+          "visibility": "INHERITED",
+          "moduleId": 6774798,
+          "preProcessors": [
+            {
+              "id": "inheritProcessors",
+              "type": "inheritProcessors",
+              "data": {}
+            }
+          ],
+          "postProcessors": [
+            {
+              "id": "inheritProcessors",
+              "type": "inheritProcessors",
+              "data": {}
+            }
+          ],
+          "inheritPostProcessors": {},
+          "inheritPreProcessors": {},
+          "items": [
+            {
+              "name": "创建订单",
+              "api": {
+                "id": "392385447",
+                "method": "post",
+                "path": "/api/order",
+                "parameters": {
+                  "path": [],
+                  "query": [],
+                  "cookie": [],
+                  "header": []
+                },
+                "auth": {},
+                "securityScheme": {},
+                "commonParameters": {},
+                "responses": [
+                  {
+                    "id": "173578504",
+                    "code": 200,
+                    "jsonSchema": {
+                      "$ref": "#/definitions/229818777",
+                      "description": ""
+                    },
+                    "contentType": "json"
+                  }
+                ],
+                "responseExamples": [
+                  {
+                    "name": "成功示例",
+                    "data": "{\n  \"code\": 0,\n  \"message\": \"\",\n  \"data\": {\n    \"bookingId\": 0,\n    \"orderId\": \"\",\n    \"trainNumber\": \"\",\n    \"status\": \"\",\n    \"paymentStatus\": \"\",\n    \"totalAmount\": 0.0,\n    \"payUrl\": \"\",\n    \"createdAt\": \"\",\n    \"passengers\": [\n      {\n        \"passengerId\": 0,\n        \"name\": \"\",\n        \"type\": \"\",\n        \"idCardNumber\": \"\",\n        \"seatNumber\": \"\",\n        \"seatType\": \"\",\n        \"ticketPrice\": 0.0\n      }\n    ]\n  }\n}",
+                    "responseId": "173578504"
+                  }
+                ],
+                "requestBody": {
+                  "type": "application/json",
+                  "parameters": [],
+                  "jsonSchema": {
+                    "$ref": "#/definitions/229818779",
+                    "description": ""
+                  },
+                  "oasExtensions": ""
+                },
+                "description": "",
+                "tags": [],
+                "status": "released",
+                "serverId": "",
+                "operationId": "",
+                "sourceUrl": "",
+                "ordering": 6,
+                "cases": [],
+                "mocks": [],
+                "customApiFields": "{}",
+                "advancedSettings": {
+                  "disabledSystemHeaders": {}
+                },
+                "mockScript": {},
+                "codeSamples": [],
+                "commonResponseStatus": {},
+                "responseChildren": [],
+                "visibility": "INHERITED",
+                "moduleId": 6774798,
+                "oasExtensions": "",
+                "type": "http",
+                "preProcessors": [],
+                "postProcessors": [],
+                "inheritPostProcessors": {},
+                "inheritPreProcessors": {}
+              }
+            }
+          ]
+        },
+        {
+          "name": "模块2：乘车人管理控制器",
+          "id": 73955840,
+          "auth": {},
+          "securityScheme": {},
+          "parentId": 0,
+          "serverId": "",
+          "description": "",
+          "identityPattern": {
+            "httpApi": {
+              "type": "inherit",
+              "bodyType": "",
+              "fields": []
+            }
+          },
+          "shareSettings": {},
+          "visibility": "INHERITED",
+          "moduleId": 6774798,
+          "preProcessors": [
+            {
+              "id": "inheritProcessors",
+              "type": "inheritProcessors",
+              "data": {}
+            }
+          ],
+          "postProcessors": [
+            {
+              "id": "inheritProcessors",
+              "type": "inheritProcessors",
+              "data": {}
+            }
+          ],
+          "inheritPostProcessors": {},
+          "inheritPreProcessors": {},
+          "items": [
+            {
+              "name": "1. 获取列表",
+              "api": {
+                "id": "392385448",
+                "method": "get",
+                "path": "/api/passengers/list",
+                "parameters": {
+                  "path": [],
+                  "query": [
+                    {
+                      "name": "userId",
+                      "required": true,
+                      "description": "",
+                      "type": "integer",
+                      "schema": {
+                        "type": "integer"
+                      },
+                      "id": "1XzUIrYnlx"
+                    }
+                  ],
+                  "cookie": [],
+                  "header": []
+                },
+                "auth": {},
+                "securityScheme": {},
+                "commonParameters": {},
+                "responses": [
+                  {
+                    "id": "155849251",
+                    "code": 200,
+                    "jsonSchema": {
+                      "$ref": "#/definitions/229818781"
+                    },
+                    "contentType": "json"
+                  }
+                ],
+                "responseExamples": [
+                  {
+                    "name": "成功示例",
+                    "data": "{\n  \"code\": 0,\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"id\": 0,\n      \"userId\": 0,\n      \"name\": \"\",\n      \"type\": 0,\n      \"idCardType\": \"\",\n      \"idCardNumber\": \"\",\n      \"phone\": \"\",\n      \"createTime\": \"\",\n      \"updateTime\": \"\"\n    }\n  ]\n}",
+                    "responseId": "155849251"
+                  }
+                ],
+                "requestBody": {
+                  "type": "none",
+                  "parameters": [],
+                  "oasExtensions": ""
+                },
+                "description": "GET /api/passengers/list?userId=1001",
+                "tags": [],
+                "status": "released",
+                "serverId": "",
+                "operationId": "",
+                "sourceUrl": "",
+                "ordering": 6,
+                "cases": [
+                  {
+                    "id": 328990279,
+                    "type": "DEBUG_CASE",
+                    "path": null,
+                    "name": "成功",
+                    "responseId": "155849251",
+                    "parameters": {
+                      "query": [
+                        {
+                          "id": "HQaLGC4eNg",
+                          "relatedId": "1XzUIrYnlx",
+                          "value": "26",
+                          "enable": true,
+                          "isDelete": false,
+                          "relatedName": "userId"
+                        }
+                      ],
+                      "path": [],
+                      "cookie": [],
+                      "header": []
+                    },
+                    "commonParameters": {
+                      "query": [],
+                      "body": [],
+                      "header": [],
+                      "cookie": []
+                    },
+                    "requestBody": {
+                      "parameters": [],
+                      "data": "",
+                      "generateMode": "normal"
+                    },
+                    "auth": {},
+                    "securityScheme": {},
+                    "advancedSettings": {
+                      "disabledSystemHeaders": {}
+                    },
+                    "requestResult": "{\"id\":\"temp.1e4077d8-bff3-4807-9ec7-d307b54e5e56\",\"cursor\":{\"position\":0,\"iteration\":0,\"length\":1,\"cycles\":1,\"empty\":false,\"eof\":false,\"bof\":true,\"cr\":false,\"ref\":\"1e4077d8-bff3-4807-9ec7-d307b54e5e56\",\"requestIndex\":0,\"httpRequestId\":\"7b1acbfb-a151-4824-b7f5-3c60af4797e9\"},\"type\":\"http\",\"response\":{\"id\":\"dc2b21a2-7698-4998-a42a-2a2f4a1ec2f3\",\"status\":\"OK\",\"code\":200,\"header\":[{\"key\":\"Vary\",\"value\":\"Origin\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Method\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Headers\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Transfer-Encoding\",\"value\":\"chunked\"},{\"key\":\"Date\",\"value\":\"Wed, 17 Dec 2025 01:59:43 GMT\"},{\"key\":\"Keep-Alive\",\"value\":\"timeout=60\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"trailer\":[],\"stream\":{\"type\":\"Buffer\",\"data\":[123,34,99,111,100,101,34,58,50,48,48,44,34,109,101,115,115,97,103,101,34,58,34,115,117,99,99,101,115,115,34,44,34,100,97,116,97,34,58,91,123,34,105,100,34,58,49,44,34,117,115,101,114,73,100,34,58,50,54,44,34,110,97,109,101,34,58,34,229,175,191,230,181,169,230,153,168,34,44,34,116,121,112,101,34,58,55,55,44,34,105,100,67,97,114,100,84,121,112,101,34,58,34,54,51,48,49,48,48,49,57,56,49,48,55,49,53,51,50,48,88,34,44,34,105,100,67,97,114,100,78,117,109,98,101,114,34,58,34,49,50,48,49,48,49,50,48,48,50,48,49,50,49,49,55,53,57,34,44,34,112,104,111,110,101,34,58,34,48,55,52,55,49,52,55,57,53,50,56,34,44,34,99,114,101,97,116,101,84,105,109,101,34,58,34,50,48,50,53,45,49,50,45,49,55,84,48,57,58,53,56,58,53,55,34,44,34,117,112,100,97,116,101,84,105,109,101,34,58,34,50,48,50,53,45,49,50,45,49,55,84,48,57,58,53,56,58,53,55,34,125,93,125]},\"cookie\":[],\"responseTime\":17,\"responseSize\":253,\"type\":\"http\",\"tempFilePath\":\"\",\"timingPhases\":{\"prepare\":0.6184000372886658,\"wait\":0.2806999683380127,\"dns\":0,\"tcp\":0,\"firstByte\":15.194200038909912,\"download\":0.6661999821662903,\"process\":0.05070000886917114,\"total\":16.810200035572052}},\"request\":{\"url\":{\"protocol\":\"http\",\"port\":\"8081\",\"path\":[\"api\",\"passengers\",\"list\"],\"host\":[\"127\",\"0\",\"0\",\"1\"],\"query\":[{\"key\":\"userId\",\"value\":\"26\"}],\"variable\":[]},\"header\":[{\"key\":\"User-Agent\",\"value\":\"Apifox/1.0.0 (https://apifox.com)\"},{\"key\":\"Accept\",\"value\":\"*/*\",\"system\":true},{\"key\":\"Host\",\"value\":\"127.0.0.1:8081\",\"system\":true},{\"key\":\"Accept-Encoding\",\"value\":\"gzip, deflate, br\",\"system\":true},{\"key\":\"Connection\",\"value\":\"keep-alive\",\"system\":true}],\"method\":\"GET\",\"baseUrl\":\"http://127.0.0.1:8081\",\"body\":{},\"type\":\"http\"},\"history\":{\"execution\":{\"verbose\":false,\"sessions\":{},\"data\":[{\"request\":{\"method\":\"GET\",\"href\":\"http://127.0.0.1:8081/api/passengers/list?userId=26\",\"headers\":[{\"key\":\"User-Agent\",\"value\":\"Apifox/1.0.0 (https://apifox.com)\"},{\"key\":\"Accept\",\"value\":\"*/*\"},{\"key\":\"Host\",\"value\":\"127.0.0.1:8081\"},{\"key\":\"Accept-Encoding\",\"value\":\"gzip, deflate, br\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"httpVersion\":\"1.1\"},\"response\":{\"statusCode\":200,\"headers\":[{\"key\":\"Vary\",\"value\":\"Origin\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Method\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Headers\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Transfer-Encoding\",\"value\":\"chunked\"},{\"key\":\"Date\",\"value\":\"Wed, 17 Dec 2025 01:59:43 GMT\"},{\"key\":\"Keep-Alive\",\"value\":\"timeout=60\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"httpVersion\":\"1.1\"},\"timings\":{\"start\":1765936783472,\"requestStart\":1765936783473,\"offset\":{\"request\":0.6184000372886658,\"socket\":0.8991000056266785,\"response\":16.09330004453659,\"end\":16.75950002670288,\"lookup\":0.8991000056266785,\"connect\":0.8991000056266785,\"done\":16.810200035572052}}}]}},\"responseValidation\":{\"schema\":{\"valid\":true,\"message\":\"\",\"errors\":null},\"responseCode\":{\"valid\":true}},\"passed\":true,\"timings\":{\"started\":1765936783455,\"preProcessorsStarted\":1765936783464,\"preProcessorsCompleted\":1765936783464,\"postProcessorsStarted\":1765936783491,\"postProcessorsCompleted\":1765936783491,\"completed\":1765936783494},\"metaInfo\":{\"httpApiId\":392385448,\"httpApiCaseId\":0,\"httpApiName\":\"1. 获取列表\",\"httpApiPath\":\"/api/passengers/list\",\"httpApiMethod\":\"get\",\"httpApiCaseName\":\"\",\"moduleId\":6774798}}",
+                    "visibility": "INHERITED",
+                    "moduleId": 6774798,
+                    "categoryId": 0,
+                    "tagIds": [],
+                    "apiTestDataList": [],
+                    "preProcessors": [],
+                    "postProcessors": [],
+                    "inheritPostProcessors": {},
+                    "inheritPreProcessors": {}
+                  }
+                ],
+                "mocks": [],
+                "customApiFields": "{}",
+                "advancedSettings": {
+                  "disabledSystemHeaders": {}
+                },
+                "mockScript": {},
+                "codeSamples": [],
+                "commonResponseStatus": {},
+                "responseChildren": [],
+                "visibility": "INHERITED",
+                "moduleId": 6774798,
+                "oasExtensions": "",
+                "type": "http",
+                "preProcessors": [],
+                "postProcessors": [],
+                "inheritPostProcessors": {},
+                "inheritPreProcessors": {}
+              }
+            },
+            {
+              "name": "2. 新增乘车人",
+              "api": {
+                "id": "392385449",
+                "method": "post",
+                "path": "/api/passengers/add",
+                "parameters": {
+                  "path": [],
+                  "query": [],
+                  "cookie": [],
+                  "header": []
+                },
+                "auth": {},
+                "securityScheme": {},
+                "commonParameters": {},
+                "responses": [
+                  {
+                    "id": "192837773",
+                    "code": 200,
+                    "jsonSchema": {
+                      "$ref": "#/definitions/229818782"
+                    },
+                    "contentType": "json"
+                  }
+                ],
+                "responseExamples": [
+                  {
+                    "name": "成功示例",
+                    "data": "{\n  \"code\": 0,\n  \"message\": \"\",\n  \"data\": \"\"\n}",
+                    "responseId": "192837773"
+                  }
+                ],
+                "requestBody": {
+                  "type": "application/json",
+                  "parameters": [],
+                  "jsonSchema": {
+                    "$ref": "#/definitions/229818780",
+                    "description": ""
+                  },
+                  "oasExtensions": ""
+                },
+                "description": "POST /api/passengers/add\nBody:{ \"userId\": 1001, \"name\": \"张三\", \"idCardNumber\": \"...\", ...}",
+                "tags": [],
+                "status": "released",
+                "serverId": "",
+                "operationId": "",
+                "sourceUrl": "",
+                "ordering": 12,
+                "cases": [
+                  {
+                    "id": 328990241,
+                    "type": "DEBUG_CASE",
+                    "path": null,
+                    "name": "成功",
+                    "responseId": "192837773",
+                    "parameters": {
+                      "query": [],
+                      "path": [],
+                      "cookie": [],
+                      "header": []
+                    },
+                    "commonParameters": {
+                      "query": [],
+                      "body": [],
+                      "header": [],
+                      "cookie": []
+                    },
+                    "requestBody": {
+                      "parameters": [],
+                      "data": "{\r\n    \"id\": 5,\r\n    \"userId\": 26,\r\n    \"name\": \"寿浩晨\",\r\n    \"type\": 77,\r\n    \"idCardType\": \"63010019810715320X\",\r\n    \"idCardNumber\": \"120101200201211759\",\r\n    \"phone\": \"07471479528\"\r\n}",
+                      "generateMode": "example"
+                    },
+                    "auth": {},
+                    "securityScheme": {},
+                    "advancedSettings": {
+                      "disabledSystemHeaders": {}
+                    },
+                    "requestResult": "{\"id\":\"temp.4140846d-f504-4a20-b47d-61b6f6f4cd61\",\"cursor\":{\"position\":0,\"iteration\":0,\"length\":1,\"cycles\":1,\"empty\":false,\"eof\":false,\"bof\":true,\"cr\":false,\"ref\":\"4140846d-f504-4a20-b47d-61b6f6f4cd61\",\"requestIndex\":0,\"httpRequestId\":\"b04818c0-b62f-4f34-bf65-da1fad8ec3a8\"},\"type\":\"http\",\"response\":{\"id\":\"4363e70b-b19e-4e8a-9060-aab75395cfff\",\"status\":\"OK\",\"code\":200,\"header\":[{\"key\":\"Vary\",\"value\":\"Origin\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Method\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Headers\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Transfer-Encoding\",\"value\":\"chunked\"},{\"key\":\"Date\",\"value\":\"Wed, 17 Dec 2025 01:58:57 GMT\"},{\"key\":\"Keep-Alive\",\"value\":\"timeout=60\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"trailer\":[],\"stream\":{\"type\":\"Buffer\",\"data\":[123,34,99,111,100,101,34,58,50,48,48,44,34,109,101,115,115,97,103,101,34,58,34,115,117,99,99,101,115,115,34,44,34,100,97,116,97,34,58,34,230,183,187,229,138,160,230,136,144,229,138,159,34,125]},\"cookie\":[],\"responseTime\":63,\"responseSize\":54,\"type\":\"http\",\"tempFilePath\":\"\",\"timingPhases\":{\"prepare\":0.4905000329017639,\"wait\":0.6941999793052673,\"dns\":0,\"tcp\":0.5286000370979309,\"firstByte\":60.30140000581741,\"download\":0.8673999905586243,\"process\":0.08319997787475586,\"total\":62.965300023555756}},\"request\":{\"url\":{\"protocol\":\"http\",\"port\":\"8081\",\"path\":[\"api\",\"passengers\",\"add\"],\"host\":[\"127\",\"0\",\"0\",\"1\"],\"query\":[],\"variable\":[]},\"header\":[{\"key\":\"User-Agent\",\"value\":\"Apifox/1.0.0 (https://apifox.com)\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Accept\",\"value\":\"*/*\",\"system\":true},{\"key\":\"Host\",\"value\":\"127.0.0.1:8081\",\"system\":true},{\"key\":\"Accept-Encoding\",\"value\":\"gzip, deflate, br\",\"system\":true},{\"key\":\"Connection\",\"value\":\"keep-alive\",\"system\":true},{\"key\":\"Content-Length\",\"value\":192,\"system\":true}],\"method\":\"POST\",\"baseUrl\":\"http://127.0.0.1:8081\",\"body\":{\"mode\":\"raw\",\"raw\":\"{\\r\\n    \\\"id\\\": 5,\\r\\n    \\\"userId\\\": 26,\\r\\n    \\\"name\\\": \\\"寿浩晨\\\",\\r\\n    \\\"type\\\": 77,\\r\\n    \\\"idCardType\\\": \\\"63010019810715320X\\\",\\r\\n    \\\"idCardNumber\\\": \\\"120101200201211759\\\",\\r\\n    \\\"phone\\\": \\\"07471479528\\\"\\r\\n}\",\"generateMode\":\"example\",\"type\":\"application/json\"},\"type\":\"http\"},\"history\":{\"execution\":{\"verbose\":false,\"sessions\":{},\"data\":[{\"request\":{\"method\":\"POST\",\"href\":\"http://127.0.0.1:8081/api/passengers/add\",\"headers\":[{\"key\":\"User-Agent\",\"value\":\"Apifox/1.0.0 (https://apifox.com)\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Accept\",\"value\":\"*/*\"},{\"key\":\"Host\",\"value\":\"127.0.0.1:8081\"},{\"key\":\"Accept-Encoding\",\"value\":\"gzip, deflate, br\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"},{\"key\":\"Content-Length\",\"value\":\"192\"}],\"httpVersion\":\"1.1\"},\"response\":{\"statusCode\":200,\"headers\":[{\"key\":\"Vary\",\"value\":\"Origin\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Method\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Headers\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Transfer-Encoding\",\"value\":\"chunked\"},{\"key\":\"Date\",\"value\":\"Wed, 17 Dec 2025 01:58:57 GMT\"},{\"key\":\"Keep-Alive\",\"value\":\"timeout=60\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"httpVersion\":\"1.1\"},\"timings\":{\"start\":1765936737879,\"requestStart\":1765936737879,\"offset\":{\"request\":0.4905000329017639,\"socket\":1.1847000122070312,\"connect\":1.7133000493049622,\"response\":62.014700055122375,\"end\":62.882100045681,\"lookup\":1.1847000122070312,\"done\":62.965300023555756}}}]}},\"responseValidation\":{\"schema\":{\"valid\":true,\"message\":\"\",\"errors\":null},\"responseCode\":{\"valid\":true}},\"passed\":true,\"timings\":{\"started\":1765936737782,\"preProcessorsStarted\":1765936737844,\"preProcessorsCompleted\":1765936737844,\"postProcessorsStarted\":1765936737942,\"postProcessorsCompleted\":1765936737942,\"completed\":1765936737944},\"metaInfo\":{\"httpApiId\":392385449,\"httpApiCaseId\":328980348,\"httpApiName\":\"2. 新增乘车人\",\"httpApiPath\":\"/api/passengers/add\",\"httpApiMethod\":\"post\",\"httpApiCaseName\":\"\",\"moduleId\":6774798}}",
+                    "visibility": "INHERITED",
+                    "moduleId": 6774798,
+                    "categoryId": 0,
+                    "tagIds": [],
+                    "apiTestDataList": [],
+                    "preProcessors": [],
+                    "postProcessors": [],
+                    "inheritPostProcessors": {},
+                    "inheritPreProcessors": {}
+                  }
+                ],
+                "mocks": [],
+                "customApiFields": "{}",
+                "advancedSettings": {
+                  "disabledSystemHeaders": {}
+                },
+                "mockScript": {},
+                "codeSamples": [],
+                "commonResponseStatus": {},
+                "responseChildren": [],
+                "visibility": "INHERITED",
+                "moduleId": 6774798,
+                "oasExtensions": "",
+                "type": "http",
+                "preProcessors": [],
+                "postProcessors": [],
+                "inheritPostProcessors": {},
+                "inheritPreProcessors": {}
+              }
+            },
+            {
+              "name": "3. 修改乘车人",
+              "api": {
+                "id": "392385450",
+                "method": "post",
+                "path": "/api/passengers/update",
+                "parameters": {
+                  "path": [],
+                  "query": [],
+                  "cookie": [],
+                  "header": []
+                },
+                "auth": {},
+                "securityScheme": {},
+                "commonParameters": {},
+                "responses": [
+                  {
+                    "id": "161820244",
+                    "code": 200,
+                    "jsonSchema": {
+                      "$ref": "#/definitions/229818782"
+                    },
+                    "contentType": "json"
+                  }
+                ],
+                "responseExamples": [
+                  {
+                    "name": "成功示例",
+                    "data": "{\n  \"code\": 0,\n  \"message\": \"\",\n  \"data\": \"\"\n}",
+                    "responseId": "161820244"
+                  }
+                ],
+                "requestBody": {
+                  "type": "application/json",
+                  "parameters": [],
+                  "jsonSchema": {
+                    "$ref": "#/definitions/229818780",
+                    "description": ""
+                  },
+                  "oasExtensions": ""
+                },
+                "description": "POST /api/passengers/update",
+                "tags": [],
+                "status": "released",
+                "serverId": "",
+                "operationId": "",
+                "sourceUrl": "",
+                "ordering": 18,
+                "cases": [
+                  {
+                    "id": 328990231,
+                    "type": "DEBUG_CASE",
+                    "path": null,
+                    "name": "成功",
+                    "responseId": "161820244",
+                    "parameters": {
+                      "query": [],
+                      "path": [],
+                      "cookie": [],
+                      "header": []
+                    },
+                    "commonParameters": {
+                      "query": [],
+                      "body": [],
+                      "header": [],
+                      "cookie": []
+                    },
+                    "requestBody": {
+                      "parameters": [],
+                      "data": "{\r\n    \"id\": 1,\r\n    \"name\": \"佴婷方\",\r\n    \"type\": 3,\r\n    \"idCardType\": \"220100201907299598\",\r\n    \"idCardNumber\": \"340100197004240892\",\r\n    \"phone\": \"18307925436\"\r\n}",
+                      "generateMode": "example"
+                    },
+                    "auth": {},
+                    "securityScheme": {},
+                    "advancedSettings": {
+                      "disabledSystemHeaders": {}
+                    },
+                    "requestResult": "{\"id\":\"temp.ae8dfb6e-8d88-42c2-8db9-f39b80d14fd9\",\"cursor\":{\"position\":0,\"iteration\":0,\"length\":1,\"cycles\":1,\"empty\":false,\"eof\":false,\"bof\":true,\"cr\":false,\"ref\":\"ae8dfb6e-8d88-42c2-8db9-f39b80d14fd9\",\"requestIndex\":0,\"httpRequestId\":\"9e3db9e2-9df0-447f-b05c-379fad6065a4\"},\"type\":\"http\",\"response\":{\"id\":\"a1f098d1-7a2e-47e1-9424-49a6ddff0ae5\",\"status\":\"OK\",\"code\":200,\"header\":[{\"key\":\"Vary\",\"value\":\"Origin\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Method\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Headers\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Transfer-Encoding\",\"value\":\"chunked\"},{\"key\":\"Date\",\"value\":\"Wed, 17 Dec 2025 02:04:54 GMT\"},{\"key\":\"Keep-Alive\",\"value\":\"timeout=60\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"trailer\":[],\"stream\":{\"type\":\"Buffer\",\"data\":[123,34,99,111,100,101,34,58,50,48,48,44,34,109,101,115,115,97,103,101,34,58,34,115,117,99,99,101,115,115,34,44,34,100,97,116,97,34,58,34,228,191,174,230,148,185,230,136,144,229,138,159,34,125]},\"cookie\":[],\"responseTime\":10,\"responseSize\":54,\"type\":\"http\",\"tempFilePath\":\"\",\"timingPhases\":{\"prepare\":0.44110000133514404,\"wait\":0.23159998655319214,\"dns\":0,\"tcp\":0,\"firstByte\":8.489000022411346,\"download\":0.5630000233650208,\"process\":0.03289997577667236,\"total\":9.757600009441376}},\"request\":{\"url\":{\"protocol\":\"http\",\"port\":\"8081\",\"path\":[\"api\",\"passengers\",\"update\"],\"host\":[\"127\",\"0\",\"0\",\"1\"],\"query\":[],\"variable\":[]},\"header\":[{\"key\":\"User-Agent\",\"value\":\"Apifox/1.0.0 (https://apifox.com)\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Accept\",\"value\":\"*/*\",\"system\":true},{\"key\":\"Host\",\"value\":\"127.0.0.1:8081\",\"system\":true},{\"key\":\"Accept-Encoding\",\"value\":\"gzip, deflate, br\",\"system\":true},{\"key\":\"Connection\",\"value\":\"keep-alive\",\"system\":true},{\"key\":\"Content-Length\",\"value\":172,\"system\":true}],\"method\":\"POST\",\"baseUrl\":\"http://127.0.0.1:8081\",\"body\":{\"mode\":\"raw\",\"raw\":\"{\\r\\n    \\\"id\\\": 1,\\r\\n    \\\"name\\\": \\\"佴婷方\\\",\\r\\n    \\\"type\\\": 3,\\r\\n    \\\"idCardType\\\": \\\"220100201907299598\\\",\\r\\n    \\\"idCardNumber\\\": \\\"340100197004240892\\\",\\r\\n    \\\"phone\\\": \\\"18307925436\\\"\\r\\n}\",\"generateMode\":\"example\",\"type\":\"application/json\"},\"type\":\"http\"},\"history\":{\"execution\":{\"verbose\":false,\"sessions\":{},\"data\":[{\"request\":{\"method\":\"POST\",\"href\":\"http://127.0.0.1:8081/api/passengers/update\",\"headers\":[{\"key\":\"User-Agent\",\"value\":\"Apifox/1.0.0 (https://apifox.com)\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Accept\",\"value\":\"*/*\"},{\"key\":\"Host\",\"value\":\"127.0.0.1:8081\"},{\"key\":\"Accept-Encoding\",\"value\":\"gzip, deflate, br\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"},{\"key\":\"Content-Length\",\"value\":\"172\"}],\"httpVersion\":\"1.1\"},\"response\":{\"statusCode\":200,\"headers\":[{\"key\":\"Vary\",\"value\":\"Origin\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Method\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Headers\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Transfer-Encoding\",\"value\":\"chunked\"},{\"key\":\"Date\",\"value\":\"Wed, 17 Dec 2025 02:04:54 GMT\"},{\"key\":\"Keep-Alive\",\"value\":\"timeout=60\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"httpVersion\":\"1.1\"},\"timings\":{\"start\":1765937094786,\"requestStart\":1765937094787,\"offset\":{\"request\":0.44110000133514404,\"socket\":0.6726999878883362,\"response\":9.161700010299683,\"end\":9.724700033664703,\"lookup\":0.6726999878883362,\"connect\":0.6726999878883362,\"done\":9.757600009441376}}}]}},\"responseValidation\":{\"schema\":{\"valid\":true,\"message\":\"\",\"errors\":null},\"responseCode\":{\"valid\":true}},\"passed\":true,\"timings\":{\"started\":1765937094753,\"preProcessorsStarted\":1765937094762,\"preProcessorsCompleted\":1765937094762,\"postProcessorsStarted\":1765937094801,\"postProcessorsCompleted\":1765937094801,\"completed\":1765937094802},\"metaInfo\":{\"httpApiId\":392385450,\"httpApiCaseId\":328983114,\"httpApiName\":\"3. 修改乘车人\",\"httpApiPath\":\"/api/passengers/update\",\"httpApiMethod\":\"post\",\"httpApiCaseName\":\"\",\"moduleId\":6774798}}",
+                    "visibility": "INHERITED",
+                    "moduleId": 6774798,
+                    "categoryId": 0,
+                    "tagIds": [],
+                    "apiTestDataList": [],
+                    "preProcessors": [],
+                    "postProcessors": [],
+                    "inheritPostProcessors": {},
+                    "inheritPreProcessors": {}
+                  }
+                ],
+                "mocks": [],
+                "customApiFields": "{}",
+                "advancedSettings": {
+                  "disabledSystemHeaders": {}
+                },
+                "mockScript": {},
+                "codeSamples": [],
+                "commonResponseStatus": {},
+                "responseChildren": [],
+                "visibility": "INHERITED",
+                "moduleId": 6774798,
+                "oasExtensions": "",
+                "type": "http",
+                "preProcessors": [],
+                "postProcessors": [],
+                "inheritPostProcessors": {},
+                "inheritPreProcessors": {}
+              }
+            },
+            {
+              "name": "4. 删除乘车人",
+              "api": {
+                "id": "392385451",
+                "method": "post",
+                "path": "/api/passengers/remove",
+                "parameters": {
+                  "path": [],
+                  "query": [
+                    {
+                      "name": "id",
+                      "required": true,
+                      "description": "",
+                      "type": "integer",
+                      "schema": {
+                        "type": "integer"
+                      },
+                      "id": "mnBO74cA4o"
+                    }
+                  ],
+                  "cookie": [],
+                  "header": []
+                },
+                "auth": {},
+                "securityScheme": {},
+                "commonParameters": {},
+                "responses": [
+                  {
+                    "id": "164456782",
+                    "code": 200,
+                    "jsonSchema": {
+                      "$ref": "#/definitions/229818782"
+                    },
+                    "contentType": "json"
+                  }
+                ],
+                "responseExamples": [
+                  {
+                    "name": "成功示例",
+                    "data": "{\n  \"code\": 0,\n  \"message\": \"\",\n  \"data\": \"\"\n}",
+                    "responseId": "164456782"
+                  }
+                ],
+                "requestBody": {
+                  "type": "none",
+                  "parameters": [],
+                  "oasExtensions": ""
+                },
+                "description": "POST /api/passengers/remove?id=1\n(也可以用 DeleteMapping，但Post兼容性更好)",
+                "tags": [],
+                "status": "released",
+                "serverId": "",
+                "operationId": "",
+                "sourceUrl": "",
+                "ordering": 24,
+                "cases": [
+                  {
+                    "id": 328990165,
+                    "type": "DEBUG_CASE",
+                    "path": null,
+                    "name": "成功",
+                    "responseId": "164456782",
+                    "parameters": {
+                      "query": [
+                        {
+                          "id": "RCikzmegh4",
+                          "relatedId": "mnBO74cA4o",
+                          "value": "1",
+                          "enable": true,
+                          "isDelete": false,
+                          "relatedName": "id"
+                        }
+                      ],
+                      "path": [],
+                      "cookie": [],
+                      "header": []
+                    },
+                    "commonParameters": {
+                      "query": [],
+                      "body": [],
+                      "header": [],
+                      "cookie": []
+                    },
+                    "requestBody": {
+                      "parameters": [],
+                      "data": "",
+                      "generateMode": "normal"
+                    },
+                    "auth": {},
+                    "securityScheme": {},
+                    "advancedSettings": {
+                      "disabledSystemHeaders": {}
+                    },
+                    "requestResult": "{\"id\":\"temp.3b9e3fe3-0177-4eb6-bdf2-7c4caee4fa7a\",\"cursor\":{\"position\":0,\"iteration\":0,\"length\":1,\"cycles\":1,\"empty\":false,\"eof\":false,\"bof\":true,\"cr\":false,\"ref\":\"3b9e3fe3-0177-4eb6-bdf2-7c4caee4fa7a\",\"requestIndex\":0,\"httpRequestId\":\"550d1a2c-0759-4e88-81f7-19013151b3bd\"},\"type\":\"http\",\"response\":{\"id\":\"b3f92151-9829-41aa-b8f8-80eb2f1b2387\",\"status\":\"OK\",\"code\":200,\"header\":[{\"key\":\"Vary\",\"value\":\"Origin\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Method\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Headers\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Transfer-Encoding\",\"value\":\"chunked\"},{\"key\":\"Date\",\"value\":\"Wed, 17 Dec 2025 02:05:33 GMT\"},{\"key\":\"Keep-Alive\",\"value\":\"timeout=60\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"trailer\":[],\"stream\":{\"type\":\"Buffer\",\"data\":[123,34,99,111,100,101,34,58,50,48,48,44,34,109,101,115,115,97,103,101,34,58,34,115,117,99,99,101,115,115,34,44,34,100,97,116,97,34,58,34,229,136,160,233,153,164,230,136,144,229,138,159,34,125]},\"cookie\":[],\"responseTime\":15,\"responseSize\":54,\"type\":\"http\",\"tempFilePath\":\"\",\"timingPhases\":{\"prepare\":0.8055000305175781,\"wait\":0.2092999815940857,\"dns\":0,\"tcp\":0,\"firstByte\":14.030099987983704,\"download\":0.5706999897956848,\"process\":0.0340999960899353,\"total\":15.649699985980988}},\"request\":{\"url\":{\"protocol\":\"http\",\"port\":\"8081\",\"path\":[\"api\",\"passengers\",\"remove\"],\"host\":[\"127\",\"0\",\"0\",\"1\"],\"query\":[{\"key\":\"id\",\"value\":\"1\"}],\"variable\":[]},\"header\":[{\"key\":\"User-Agent\",\"value\":\"Apifox/1.0.0 (https://apifox.com)\"},{\"key\":\"Accept\",\"value\":\"*/*\",\"system\":true},{\"key\":\"Host\",\"value\":\"127.0.0.1:8081\",\"system\":true},{\"key\":\"Accept-Encoding\",\"value\":\"gzip, deflate, br\",\"system\":true},{\"key\":\"Connection\",\"value\":\"keep-alive\",\"system\":true},{\"key\":\"Content-Length\",\"value\":0,\"system\":true}],\"method\":\"POST\",\"baseUrl\":\"http://127.0.0.1:8081\",\"body\":{},\"type\":\"http\"},\"history\":{\"execution\":{\"verbose\":false,\"sessions\":{},\"data\":[{\"request\":{\"method\":\"POST\",\"href\":\"http://127.0.0.1:8081/api/passengers/remove?id=1\",\"headers\":[{\"key\":\"User-Agent\",\"value\":\"Apifox/1.0.0 (https://apifox.com)\"},{\"key\":\"Accept\",\"value\":\"*/*\"},{\"key\":\"Host\",\"value\":\"127.0.0.1:8081\"},{\"key\":\"Accept-Encoding\",\"value\":\"gzip, deflate, br\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"},{\"key\":\"Content-Length\",\"value\":\"0\"}],\"httpVersion\":\"1.1\"},\"response\":{\"statusCode\":200,\"headers\":[{\"key\":\"Vary\",\"value\":\"Origin\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Method\"},{\"key\":\"Vary\",\"value\":\"Access-Control-Request-Headers\"},{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Transfer-Encoding\",\"value\":\"chunked\"},{\"key\":\"Date\",\"value\":\"Wed, 17 Dec 2025 02:05:33 GMT\"},{\"key\":\"Keep-Alive\",\"value\":\"timeout=60\"},{\"key\":\"Connection\",\"value\":\"keep-alive\"}],\"httpVersion\":\"1.1\"},\"timings\":{\"start\":1765937133577,\"requestStart\":1765937133578,\"offset\":{\"request\":0.8055000305175781,\"socket\":1.0148000121116638,\"response\":15.044900000095367,\"end\":15.615599989891052,\"lookup\":1.0148000121116638,\"connect\":1.0148000121116638,\"done\":15.649699985980988}}}]}},\"responseValidation\":{\"schema\":{\"valid\":true,\"message\":\"\",\"errors\":null},\"responseCode\":{\"valid\":true}},\"passed\":true,\"timings\":{\"started\":1765937133517,\"preProcessorsStarted\":1765937133532,\"preProcessorsCompleted\":1765937133532,\"postProcessorsStarted\":1765937133606,\"postProcessorsCompleted\":1765937133606,\"completed\":1765937133608},\"metaInfo\":{\"httpApiId\":392385451,\"httpApiCaseId\":0,\"httpApiName\":\"4. 删除乘车人\",\"httpApiPath\":\"/api/passengers/remove\",\"httpApiMethod\":\"post\",\"httpApiCaseName\":\"\",\"moduleId\":6774798}}",
+                    "visibility": "INHERITED",
+                    "moduleId": 6774798,
+                    "categoryId": 0,
+                    "tagIds": [],
+                    "apiTestDataList": [],
+                    "preProcessors": [],
+                    "postProcessors": [],
+                    "inheritPostProcessors": {},
+                    "inheritPreProcessors": {}
+                  }
+                ],
+                "mocks": [],
+                "customApiFields": "{}",
+                "advancedSettings": {
+                  "disabledSystemHeaders": {}
+                },
+                "mockScript": {},
+                "codeSamples": [],
+                "commonResponseStatus": {},
+                "responseChildren": [],
+                "visibility": "INHERITED",
+                "moduleId": 6774798,
+                "oasExtensions": "",
+                "type": "http",
+                "preProcessors": [],
+                "postProcessors": [],
+                "inheritPostProcessors": {},
+                "inheritPreProcessors": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "socketCollection": [],
+  "docCollection": [],
+  "webSocketCollection": [],
+  "socketIOCollection": [],
+  "responseCollection": [
+    {
+      "_databaseId": 8099806,
+      "updatedAt": "2025-12-17T01:44:25.000Z",
+      "name": "根目录",
+      "type": "root",
+      "children": [],
+      "moduleId": 6774798,
+      "parentId": 0,
+      "id": 8099806,
+      "ordering": [],
+      "items": []
+    }
+  ],
+  "schemaCollection": [
+    {
+      "id": 17700778,
+      "name": "根目录",
+      "visibility": "SHARED",
+      "moduleId": 6774798,
+      "items": [
+        {
+          "name": "PassengerDTO",
+          "displayName": "",
+          "id": "#/definitions/229818775",
+          "description": "com.train.booking.dto.response.PassengerDTO",
+          "schema": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "passengerId": {
+                  "type": "integer",
+                  "description": "",
+                  "format": "int64"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "乘客姓名"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "乘客类型 (成人/儿童)",
+                  "enum": [
+                    "ADULT",
+                    "CHILD",
+                    "STUDENT",
+                    "SENIOR"
+                  ],
+                  "x-apifox-enum": [
+                    {
+                      "value": "ADULT",
+                      "name": "ADULT",
+                      "description": "ADULT"
+                    },
+                    {
+                      "value": "CHILD",
+                      "name": "CHILD",
+                      "description": "CHILD"
+                    },
+                    {
+                      "value": "STUDENT",
+                      "name": "STUDENT",
+                      "description": "STUDENT"
+                    },
+                    {
+                      "value": "SENIOR",
+                      "name": "SENIOR",
+                      "description": "SENIOR"
+                    }
+                  ]
+                },
+                "idCardNumber": {
+                  "type": "string",
+                  "description": "身份证号 (通常后端会做脱敏处理，如 110***1234)"
+                },
+                "seatNumber": {
+                  "type": "string",
+                  "description": "座位号 (例如 \"05-12A\")\n如果下单时还未分配具体座位，可能为空"
+                },
+                "seatType": {
+                  "type": "string",
+                  "description": "座位类型 (一等座/二等座)",
+                  "enum": [
+                    "BUSINESS_CLASS",
+                    "FIRST_CLASS",
+                    "SECOND_CLASS",
+                    "HARD_SEAT",
+                    "SOFT_SLEEPER",
+                    "HARD_SLEEPER"
+                  ],
+                  "x-apifox-enum": [
+                    {
+                      "value": "BUSINESS_CLASS",
+                      "name": "BUSINESS_CLASS",
+                      "description": "BUSINESS_CLASS"
+                    },
+                    {
+                      "value": "FIRST_CLASS",
+                      "name": "FIRST_CLASS",
+                      "description": "FIRST_CLASS"
+                    },
+                    {
+                      "value": "SECOND_CLASS",
+                      "name": "SECOND_CLASS",
+                      "description": "SECOND_CLASS"
+                    },
+                    {
+                      "value": "HARD_SEAT",
+                      "name": "HARD_SEAT",
+                      "description": "HARD_SEAT"
+                    },
+                    {
+                      "value": "SOFT_SLEEPER",
+                      "name": "SOFT_SLEEPER",
+                      "description": "SOFT_SLEEPER"
+                    },
+                    {
+                      "value": "HARD_SLEEPER",
+                      "name": "HARD_SLEEPER",
+                      "description": "HARD_SLEEPER"
+                    }
+                  ]
+                },
+                "ticketPrice": {
+                  "type": "number",
+                  "description": "该张车票的价格"
+                }
+              },
+              "x-apifox-orders": [
+                "passengerId",
+                "name",
+                "type",
+                "idCardNumber",
+                "seatNumber",
+                "seatType",
+                "ticketPrice"
+              ]
+            }
+          },
+          "visibility": "INHERITED",
+          "moduleId": 6774798
+        },
+        {
+          "name": "OrderDTO",
+          "displayName": "",
+          "id": "#/definitions/229818776",
+          "description": "com.train.booking.dto.response.OrderDTO",
+          "schema": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "bookingId": {
+                  "type": "integer",
+                  "description": "数据库的主键 ID (通常隐藏，但在调试或某些API中可能需要)",
+                  "format": "int64"
+                },
+                "orderId": {
+                  "type": "string",
+                  "description": "对外展示的订单号 (PNR Number)，例如 \"TR12345678\"\n前端展示和支付时通常使用这个 ID"
+                },
+                "trainNumber": {
+                  "type": "string",
+                  "description": "列车号，例如 \"G101\""
+                },
+                "status": {
+                  "type": "string",
+                  "description": "订票状态 (PENDING, PAID, CANCELLED)",
+                  "enum": [
+                    "PENDING",
+                    "CONFIRMED",
+                    "CANCELLED",
+                    "EXPIRED"
+                  ],
+                  "x-apifox-enum": [
+                    {
+                      "value": "PENDING",
+                      "name": "PENDING",
+                      "description": "PENDING"
+                    },
+                    {
+                      "value": "CONFIRMED",
+                      "name": "CONFIRMED",
+                      "description": "CONFIRMED"
+                    },
+                    {
+                      "value": "CANCELLED",
+                      "name": "CANCELLED",
+                      "description": "CANCELLED"
+                    },
+                    {
+                      "value": "EXPIRED",
+                      "name": "EXPIRED",
+                      "description": "已过期"
+                    }
+                  ]
+                },
+                "paymentStatus": {
+                  "type": "string",
+                  "description": "支付状态 (UNPAID, PAID)",
+                  "enum": [
+                    "UNPAID",
+                    "PAID",
+                    "REFUNDED",
+                    "PARTIALLY_REFUNDED"
+                  ],
+                  "x-apifox-enum": [
+                    {
+                      "value": "UNPAID",
+                      "name": "UNPAID",
+                      "description": "UNPAID"
+                    },
+                    {
+                      "value": "PAID",
+                      "name": "PAID",
+                      "description": "PAID"
+                    },
+                    {
+                      "value": "REFUNDED",
+                      "name": "REFUNDED",
+                      "description": "REFUNDED"
+                    },
+                    {
+                      "value": "PARTIALLY_REFUNDED",
+                      "name": "PARTIALLY_REFUNDED",
+                      "description": "部分退款"
+                    }
+                  ]
+                },
+                "totalAmount": {
+                  "type": "number",
+                  "description": "订单总金额"
+                },
+                "payUrl": {
+                  "type": "string",
+                  "description": "支付链接\n这是一个运行时生成的字段，数据库不存储，用于前端跳转去支付"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "description": "下单时间",
+                  "x-apifox-mock": "@datetime"
+                },
+                "passengers": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/229818775",
+                    "description": "com.train.booking.dto.response.PassengerDTO"
+                  },
+                  "description": "乘客列表详情"
+                }
+              },
+              "x-apifox-orders": [
+                "bookingId",
+                "orderId",
+                "trainNumber",
+                "status",
+                "paymentStatus",
+                "totalAmount",
+                "payUrl",
+                "createdAt",
+                "passengers"
+              ]
+            }
+          },
+          "visibility": "INHERITED",
+          "moduleId": 6774798
+        },
+        {
+          "name": "ResultOrderDTO",
+          "displayName": "",
+          "id": "#/definitions/229818777",
+          "description": "",
+          "schema": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "description": "200 表示成功"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "提示信息"
+                },
+                "data": {
+                  "$ref": "#/definitions/229818776",
+                  "description": "业务数据"
+                }
+              },
+              "x-apifox-orders": [
+                "code",
+                "message",
+                "data"
+              ]
+            }
+          },
+          "visibility": "INHERITED",
+          "moduleId": 6774798
+        },
+        {
+          "name": "PassengerRequest",
+          "displayName": "",
+          "id": "#/definitions/229818778",
+          "description": "com.train.booking.dto.request.PassengerRequest",
+          "schema": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": ""
+                },
+                "type": {
+                  "type": "string",
+                  "description": "默认为成人",
+                  "enum": [
+                    "ADULT",
+                    "CHILD",
+                    "STUDENT",
+                    "SENIOR"
+                  ],
+                  "x-apifox-enum": [
+                    {
+                      "value": "ADULT",
+                      "name": "ADULT",
+                      "description": "ADULT"
+                    },
+                    {
+                      "value": "CHILD",
+                      "name": "CHILD",
+                      "description": "CHILD"
+                    },
+                    {
+                      "value": "STUDENT",
+                      "name": "STUDENT",
+                      "description": "STUDENT"
+                    },
+                    {
+                      "value": "SENIOR",
+                      "name": "SENIOR",
+                      "description": "SENIOR"
+                    }
+                  ],
+                  "default": "PassengerType.ADULT"
+                },
+                "idCardNumber": {
+                  "type": "string",
+                  "description": ""
+                },
+                "idCardType": {
+                  "type": "string",
+                  "description": "",
+                  "enum": [
+                    "ID_CARD",
+                    "PASSPORT",
+                    "DRIVING_LICENSE",
+                    "MILITARY_ID"
+                  ],
+                  "x-apifox-enum": [
+                    {
+                      "value": "ID_CARD",
+                      "name": "ID_CARD",
+                      "description": "ID_CARD"
+                    },
+                    {
+                      "value": "PASSPORT",
+                      "name": "PASSPORT",
+                      "description": "PASSPORT"
+                    },
+                    {
+                      "value": "DRIVING_LICENSE",
+                      "name": "DRIVING_LICENSE",
+                      "description": "DRIVING_LICENSE"
+                    },
+                    {
+                      "value": "MILITARY_ID",
+                      "name": "MILITARY_ID",
+                      "description": "MILITARY_ID"
+                    }
+                  ],
+                  "default": "IdCardType.ID_CARD"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": ""
+                },
+                "seatType": {
+                  "type": "string",
+                  "description": "用户期望的座位类型",
+                  "enum": [
+                    "BUSINESS_CLASS",
+                    "FIRST_CLASS",
+                    "SECOND_CLASS",
+                    "HARD_SEAT",
+                    "SOFT_SLEEPER",
+                    "HARD_SLEEPER"
+                  ],
+                  "x-apifox-enum": [
+                    {
+                      "value": "BUSINESS_CLASS",
+                      "name": "BUSINESS_CLASS",
+                      "description": "BUSINESS_CLASS"
+                    },
+                    {
+                      "value": "FIRST_CLASS",
+                      "name": "FIRST_CLASS",
+                      "description": "FIRST_CLASS"
+                    },
+                    {
+                      "value": "SECOND_CLASS",
+                      "name": "SECOND_CLASS",
+                      "description": "SECOND_CLASS"
+                    },
+                    {
+                      "value": "HARD_SEAT",
+                      "name": "HARD_SEAT",
+                      "description": "HARD_SEAT"
+                    },
+                    {
+                      "value": "SOFT_SLEEPER",
+                      "name": "SOFT_SLEEPER",
+                      "description": "SOFT_SLEEPER"
+                    },
+                    {
+                      "value": "HARD_SLEEPER",
+                      "name": "HARD_SLEEPER",
+                      "description": "HARD_SLEEPER"
+                    }
+                  ]
+                }
+              },
+              "x-apifox-orders": [
+                "name",
+                "type",
+                "idCardNumber",
+                "idCardType",
+                "phone",
+                "seatType"
+              ],
+              "required": [
+                "name",
+                "idCardNumber",
+                "seatType"
+              ]
+            }
+          },
+          "visibility": "INHERITED",
+          "moduleId": 6774798
+        },
+        {
+          "name": "OrderRequest",
+          "displayName": "",
+          "id": "#/definitions/229818779",
+          "description": "com.train.booking.dto.request.OrderRequest",
+          "schema": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "trainNumber": {
+                  "type": "string",
+                  "description": "对应文档: G101"
+                },
+                "userId": {
+                  "type": "integer",
+                  "description": "对应文档: 1001 (文档示例是String，建议统一为Long或String)",
+                  "format": "int64"
+                },
+                "departureStationId": {
+                  "type": "integer",
+                  "description": "",
+                  "format": "int64"
+                },
+                "arrivalStationId": {
+                  "type": "integer",
+                  "description": "",
+                  "format": "int64"
+                },
+                "passengers": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/229818778",
+                    "description": "com.train.booking.dto.request.PassengerRequest"
+                  },
+                  "description": ""
+                }
+              },
+              "x-apifox-orders": [
+                "trainNumber",
+                "userId",
+                "departureStationId",
+                "arrivalStationId",
+                "passengers"
+              ],
+              "required": [
+                "trainNumber",
+                "userId",
+                "departureStationId",
+                "arrivalStationId",
+                "passengers"
+              ]
+            }
+          },
+          "visibility": "INHERITED",
+          "moduleId": 6774798
+        },
+        {
+          "name": "Passenger",
+          "displayName": "",
+          "id": "#/definitions/229818780",
+          "description": "对应数据库表：passenger\n作用：存储用户的常用联系人",
+          "schema": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "主键ID",
+                  "format": "int64"
+                },
+                "userId": {
+                  "type": "integer",
+                  "description": "归属用户ID\n(当前登录的用户ID)",
+                  "format": "int64"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "姓名"
+                },
+                "type": {
+                  "type": "integer",
+                  "description": "旅客类型\n1:成人, 2:学生\n(建议使用枚举 PassengerType 处理)"
+                },
+                "idCardType": {
+                  "type": "string",
+                  "description": "证件类型"
+                },
+                "idCardNumber": {
+                  "type": "string",
+                  "description": "证件号码"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": "手机号"
+                },
+                "createTime": {
+                  "type": "string",
+                  "description": "创建时间",
+                  "x-apifox-mock": "@datetime"
+                },
+                "updateTime": {
+                  "type": "string",
+                  "description": "更新时间",
+                  "x-apifox-mock": "@datetime"
+                }
+              },
+              "x-apifox-orders": [
+                "id",
+                "userId",
+                "name",
+                "type",
+                "idCardType",
+                "idCardNumber",
+                "phone",
+                "createTime",
+                "updateTime"
+              ]
+            }
+          },
+          "visibility": "INHERITED",
+          "moduleId": 6774798
+        },
+        {
+          "name": "ResultListPassenger",
+          "displayName": "",
+          "id": "#/definitions/229818781",
+          "description": "",
+          "schema": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "description": "200 表示成功"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "提示信息"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/229818780",
+                    "description": "对应数据库表：passenger\n作用：存储用户的常用联系人"
+                  },
+                  "description": "业务数据"
+                }
+              },
+              "x-apifox-orders": [
+                "code",
+                "message",
+                "data"
+              ]
+            }
+          },
+          "visibility": "INHERITED",
+          "moduleId": 6774798
+        },
+        {
+          "name": "ResultString",
+          "displayName": "",
+          "id": "#/definitions/229818782",
+          "description": "",
+          "schema": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "integer",
+                  "description": "200 表示成功"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "提示信息"
+                },
+                "data": {
+                  "type": "string",
+                  "description": "业务数据"
+                }
+              },
+              "x-apifox-orders": [
+                "code",
+                "message",
+                "data"
+              ]
+            }
+          },
+          "visibility": "INHERITED",
+          "moduleId": 6774798
+        }
+      ]
+    }
+  ],
+  "securitySchemeCollection": [
+    {
+      "id": 2826567,
+      "moduleId": 6774798,
+      "name": "根目录",
+      "items": [],
+      "ordering": []
+    }
+  ],
+  "requestCollection": [
+    {
+      "name": "根目录",
+      "children": [],
+      "ordering": [
+        "requestFolder.8110791"
+      ],
+      "items": []
+    }
+  ],
+  "apiTestCaseCollection": [
+    {
+      "name": "Root",
+      "children": [],
+      "items": []
+    }
+  ],
+  "testCaseReferences": [],
+  "environments": [],
+  "commonScripts": [],
+  "databaseConnections": [],
+  "globalVariables": [],
+  "commonParameters": null,
+  "customFunctions": [],
+  "projectTestCaseCategories": [
+    {
+      "id": 5291547,
+      "name": "正向",
+      "description": "有效的输入和正确的预期结果，代表典型的用法。"
+    },
+    {
+      "id": 5291548,
+      "name": "负向",
+      "description": "消极的、无效的输入，如缺少字段、错误的类型、不支持的方法等。"
+    },
+    {
+      "id": 5291549,
+      "name": "边界值",
+      "description": "极端或边缘条件，如最大字符串长度、空值、零、null等"
+    },
+    {
+      "id": 5291550,
+      "name": "安全性",
+      "description": "可能暴露API安全性风险的测试用例。"
+    },
+    {
+      "id": 5291551,
+      "name": "其他",
+      "description": "其他未归属的测试用例。"
+    }
+  ],
+  "projectTestCaseTags": [],
+  "projectAssociations": [],
+  "moduleSettings": [
+    {
+      "id": "6774798",
+      "name": "默认模块",
+      "description": "",
+      "moduleVariables": [],
+      "openApiInfo": {}
+    }
+  ]
+}
