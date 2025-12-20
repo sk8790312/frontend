@@ -209,6 +209,11 @@ watch(
   () => route.query.selectedPassengerIds,
   (newValue) => {
     if (newValue) {
+      // 关键修改：如果 userId 还没值，先尝试初始化
+      if (!orderForm.userId) {
+        initOrderForm()
+      }
+
       const passengerIds = newValue.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id))
       if (passengerIds.length > 0) {
         loadPassengersByIds(passengerIds)
@@ -328,8 +333,8 @@ const handleSubmit = async () => {
       trainNumber: orderForm.trainNumber,
       departureStation: orderForm.departureStation,
       arrivalStation: orderForm.arrivalStation,
-      departureTime: orderForm.departureTime,
-      arrivalTime: orderForm.arrivalTime,
+      departureTime: orderForm.departureTime.replace('T', ' '),
+      arrivalTime: orderForm.arrivalTime.replace('T', ' '),
       price: parseFloat(orderForm.price),
       contactPhone: orderForm.contactPhone,
       passengerIds: selectedPassengers.value.map(p => p.id)
