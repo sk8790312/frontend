@@ -4,31 +4,31 @@
       <h1>订单管理</h1>
     </div>
 
-    <!-- 后端连接错误提示 -->
     <el-alert
-      v-if="hasConnectionError"
-      title="后端服务未启动"
-      type="warning"
-      :closable="false"
-      show-icon
-      style="margin-bottom: 20px"
+        v-if="hasConnectionError"
+        title="后端服务未启动"
+        type="warning"
+        :closable="false"
+        show-icon
+        style="margin-bottom: 20px"
     >
       <template #default>
         <p style="margin: 0;">无法连接到后端服务器，请确认后端服务是否在 <strong>http://localhost:8081</strong> 运行。</p>
       </template>
     </el-alert>
 
-    <!-- 订单列表表格 -->
     <el-table
-      v-loading="loading"
-      :data="orders"
-      stripe
-      style="width: 100%"
+        v-loading="loading"
+        :data="orders"
+        stripe
+        style="width: 100%"
     >
-      <el-table-column prop="orderId" label="订单号" min-width="150" />
+      <el-table-column prop="pnrNumber" label="PNR号" min-width="150" />
+
       <el-table-column prop="trainNumber" label="车次" min-width="100" />
       <el-table-column prop="departureStation" label="出发站" min-width="120" />
       <el-table-column prop="arrivalStation" label="到达站" min-width="120" />
+
       <el-table-column prop="status" label="订单状态" min-width="120">
         <template #default="{ row }">
           <el-tag :type="getStatusTag(row.status)">
@@ -36,39 +36,43 @@
           </el-tag>
         </template>
       </el-table-column>
+
       <el-table-column prop="paymentStatus" label="支付状态" min-width="120">
         <template #default="{ row }">
-          <el-tag :type="getPaymentStatusTag(row.paymentStatus)">
-            {{ getPaymentStatusText(row.paymentStatus) }}
+          <el-tag :type="getPaymentStatusTag(row.paymentStatus || 'UNPAID')">
+            {{ getPaymentStatusText(row.paymentStatus || 'UNPAID') }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="totalAmount" label="订单金额" min-width="120">
+
+      <el-table-column prop="totalPrice" label="订单金额" min-width="120">
         <template #default="{ row }">
-          ¥{{ row.totalAmount?.toFixed(2) || '0.00' }}
+          ¥{{ row.totalPrice?.toFixed(2) || '0.00' }}
         </template>
       </el-table-column>
-      <el-table-column prop="createdAt" label="创建时间" min-width="180">
+
+      <el-table-column prop="createTime" label="创建时间" min-width="180">
         <template #default="{ row }">
-          {{ formatDate(row.createdAt) }}
+          {{ formatDate(row.createTime) }}
         </template>
       </el-table-column>
+
       <el-table-column label="操作" min-width="200" fixed="right">
         <template #default="{ row }">
           <el-button
-            type="primary"
-            size="small"
-            link
-            @click="handleViewDetail(row)"
+              type="primary"
+              size="small"
+              link
+              @click="handleViewDetail(row)"
           >
             查看详情
           </el-button>
           <el-button
-            v-if="row.paymentStatus === 'UNPAID' && row.payUrl"
-            type="success"
-            size="small"
-            link
-            @click="handlePay(row)"
+              v-if="row.status === 'PENDING'"
+              type="success"
+              size="small"
+              link
+              @click="handlePay(row)"
           >
             去支付
           </el-button>
@@ -94,10 +98,10 @@ const hasConnectionError = ref(false)
 // 获取订单状态标签
 const getStatusTag = (status) => {
   const statusMap = {
-    'PENDING': 'info',
+    'PENDING': 'warning',   // PENDING 通常是待处理/待支付，用 warning 黄色比较合适
     'CONFIRMED': 'success',
-    'CANCELLED': 'danger',
-    'REFUNDED': 'warning'
+    'CANCELLED': 'info',    // 取消通常用灰色 info
+    'REFUNDED': 'danger'
   }
   return statusMap[status] || ''
 }
@@ -105,8 +109,8 @@ const getStatusTag = (status) => {
 // 获取订单状态文本
 const getStatusText = (status) => {
   const statusMap = {
-    'PENDING': '待确认',
-    'CONFIRMED': '已确认',
+    'PENDING': '待支付', // 根据你的上下文，PENDING 往往意味着还没付钱
+    'CONFIRMED': '已出票',
     'CANCELLED': '已取消',
     'REFUNDED': '已退款'
   }
@@ -138,7 +142,9 @@ const getPaymentStatusText = (paymentStatus) => {
 // 格式化日期
 const formatDate = (date) => {
   if (!date) return '-'
-  return new Date(date).toLocaleString('zh-CN')
+  // 解决部分浏览器无法解析 'YYYY-MM-DD HH:mm:ss' 格式的问题（替换空格为T）
+  const safeDate = typeof date === 'string' ? date.replace(' ', 'T') : date;
+  return new Date(safeDate).toLocaleString('zh-CN')
 }
 
 // 加载订单列表
@@ -152,7 +158,7 @@ const loadOrders = async () => {
   } catch (error) {
     console.error('Load orders error:', error)
     orders.value = []
-    
+
     if (error.request && !error.response) {
       hasConnectionError.value = true
     } else {
@@ -165,17 +171,18 @@ const loadOrders = async () => {
 
 // 查看详情
 const handleViewDetail = (order) => {
-  // TODO: 跳转到订单详情页面
-  ElMessage.info('订单详情功能开发中')
-  console.log('Order detail:', order)
+  // 可以在这里打印一下看看当前行的数据
+  console.log('查看订单详情:', order)
+  ElMessage.info(`查看 PNR: ${order.pnrNumber} 的详情`)
 }
 
 // 去支付
 const handlePay = (order) => {
+  // 后端JSON暂时没返回 payUrl，这里做个防御性提示
   if (order.payUrl) {
     window.open(order.payUrl, '_blank')
   } else {
-    ElMessage.warning('支付链接不存在')
+    ElMessage.success('模拟支付跳转...')
   }
 }
 
@@ -215,4 +222,3 @@ onMounted(() => {
   }
 }
 </style>
-
