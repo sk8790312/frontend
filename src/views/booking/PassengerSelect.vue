@@ -44,6 +44,7 @@
 
     <!-- 乘客列表表格 -->
     <el-table
+        ref="passengerTableRef"
       v-loading="loading"
       :data="filteredPassengers"
       stripe
@@ -67,13 +68,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, nextTick } from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import { ElMessage, ElAlert } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import { passengerService } from '@/services/passengerService'
 
 const router = useRouter()
+const route = useRoute()
 
 // 响应式数据
 const loading = ref(false)
@@ -81,6 +83,7 @@ const passengers = ref([])
 const searchQuery = ref('')
 const selectedPassengers = ref([])
 const hasConnectionError = ref(false)
+const passengerTableRef = ref(null)
 
 // 计算属性：过滤后的乘客列表
 const filteredPassengers = computed(() => {
@@ -124,6 +127,23 @@ const getUserId = () => {
   return userId ? parseInt(userId) : 1
 }
 
+const restoreSelection = () => {
+  // 1. 获取 URL 中的 ID 参数
+  const idsStr = route.query.selectedPassengerIds
+  if (!idsStr) return
+
+  // 2. 只需要分割成字符串数组即可（不需要 parseInt，转成字符串对比更稳健）
+  const targetIds = idsStr.split(',')
+
+  // 3. 遍历
+  passengers.value.forEach(row => {
+    // 【关键修改】把 row.id 也转成字符串进行对比，避免 类型(1 !== "1") 问题
+    if (targetIds.includes(String(row.id))) {
+      passengerTableRef.value?.toggleRowSelection(row, true)
+    }
+  })
+}
+
 // 加载乘客列表
 const loadPassengers = async () => {
   loading.value = true
@@ -133,6 +153,9 @@ const loadPassengers = async () => {
       userId: userId
     })
     passengers.value = Array.isArray(response.data) ? response.data : []
+    await nextTick()
+    restoreSelection()
+
   } catch (error) {
     console.error('Load passengers error:', error)
     passengers.value = []

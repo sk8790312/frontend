@@ -25,36 +25,36 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="出发站">
-              <el-input v-model="orderForm.departureStation" disabled />
+            <el-form-item label="票价">
+              <el-input v-model="orderForm.price" disabled>
+                <template #append>元</template>
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="出发站">
+              <el-input v-model="orderForm.departureStation" disabled />
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="到达站">
               <el-input v-model="orderForm.arrivalStation" disabled />
             </el-form-item>
           </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="出发时间">
               <el-input v-model="orderForm.departureTime" disabled />
             </el-form-item>
           </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="到达时间">
               <el-input v-model="orderForm.arrivalTime" disabled />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="票价">
-              <el-input v-model="orderForm.price" disabled>
-                <template #append>元</template>
-              </el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -170,9 +170,21 @@ const initOrderForm = () => {
   orderForm.trainNumber = query.trainNumber || ''
   orderForm.departureStation = query.departureStation || ''
   orderForm.arrivalStation = query.arrivalStation || ''
-  orderForm.departureTime = query.departureTime || ''
-  orderForm.arrivalTime = query.arrivalTime || ''
+  orderForm.departureTime = (query.departureTime || '').replace('T', ' ')
+  orderForm.arrivalTime = (query.arrivalTime || '').replace('T', ' ')
   orderForm.price = query.price || ''
+
+  // 1. 尝试从 sessionStorage 获取刚才暂存的手机号
+  const savedPhone = sessionStorage.getItem('temp_create_order_phone')
+
+  // 2. 如果有缓存，优先使用缓存；否则使用 URL 参数中的（如果有的话）
+  if (savedPhone) {
+    orderForm.contactPhone = savedPhone
+    // 取出来后可以清除，也可以保留直到订单提交成功
+    // sessionStorage.removeItem('temp_create_order_phone')
+  } else if (query.contactPhone) {
+    orderForm.contactPhone = query.contactPhone
+  }
   
   isFormInitialized.value = true
 }
@@ -225,15 +237,15 @@ watch(
 
 // 选择乘客
 const handleSelectPassengers = async () => {
+  // --- 新增逻辑开始 ---
+  // 在跳转前，将当前填写的手机号保存到 sessionStorage
+  if (orderForm.contactPhone) {
+    sessionStorage.setItem('temp_create_order_phone', orderForm.contactPhone)
+  }
   // 先验证联系人手机号
   if (!orderForm.contactPhone) {
-    ElMessage.warning('请先填写联系人手机号')
-    // 触发表单验证以显示错误提示
-    if (orderFormRef.value) {
-      await nextTick()
-      orderFormRef.value.validateField('contactPhone', () => {})
-    }
-    return
+    // 只是提醒，但不阻止跳转（看你需求，如果必须先填手机号则保留 return）
+    ElMessage.info('建议先填写手机号，系统会自动保存')
   }
   
   // 验证手机号格式
@@ -250,7 +262,15 @@ const handleSelectPassengers = async () => {
   
   // 跳转到乘客选择页面，携带当前订单信息（不包含selectedPassengerIds）
   const query = { ...route.query }
-  delete query.selectedPassengerIds // 移除selectedPassengerIds，避免混淆
+
+  if (selectedPassengers.value.length > 0) {
+    const currentIds = selectedPassengers.value.map(p => p.id).join(',')
+    query.selectedPassengerIds = currentIds
+  } else {
+    // 如果没选人，确保清除参数，以免误导下一页
+    delete query.selectedPassengerIds
+  }
+
   router.push({
     name: 'PassengerSelect',
     query: {
