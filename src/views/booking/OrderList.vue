@@ -1,19 +1,24 @@
 <template>
   <div class="order-list-container">
     <div class="page-header">
-      <h1>订单管理</h1>
+      <div class="header-content">
+        <h1>订单管理</h1>
+        <el-button type="primary" @click="loadOrders" :loading="loading">
+          刷新列表
+        </el-button>
+      </div>
     </div>
 
     <el-alert
         v-if="hasConnectionError"
-        title="后端服务未启动"
-        type="warning"
+        title="后端服务连接失败"
+        type="error"
         :closable="false"
         show-icon
         style="margin-bottom: 20px"
     >
       <template #default>
-        <p style="margin: 0;">无法连接到后端服务器，请确认后端服务是否在 <strong>http://localhost:8081</strong> 运行。</p>
+        <p>无法连接到后端接口，请检查服务是否启动。</p>
       </template>
     </el-alert>
 
@@ -21,15 +26,38 @@
         v-loading="loading"
         :data="orders"
         stripe
+        border
         style="width: 100%"
     >
-      <el-table-column prop="pnrNumber" label="PNR号" min-width="150" />
+      <el-table-column prop="pnrNumber" label="订单号 (PNR)" min-width="140" fixed="left">
+        <template #default="{ row }">
+          <span style="font-weight: bold; color: #409EFF">{{ row.pnrNumber }}</span>
+        </template>
+      </el-table-column>
 
-      <el-table-column prop="trainNumber" label="车次" min-width="100" />
-      <el-table-column prop="departureStation" label="出发站" min-width="120" />
-      <el-table-column prop="arrivalStation" label="到达站" min-width="120" />
+      <el-table-column prop="trainNumber" label="车次" min-width="100" align="center">
+        <template #default="{ row }">
+          <el-tag effect="plain">{{ row.trainNumber }}</el-tag>
+        </template>
+      </el-table-column>
 
-      <el-table-column prop="status" label="订单状态" min-width="120">
+      <el-table-column label="行程信息" min-width="240">
+        <template #default="{ row }">
+          <div class="trip-info">
+            <div class="station">
+              <span class="name">{{ row.departureStation }}</span>
+              <span class="time">{{ formatTime(row.departureTime) }}</span>
+            </div>
+            <div class="arrow">➜</div>
+            <div class="station">
+              <span class="name">{{ row.arrivalStation }}</span>
+              <span class="time">{{ formatTime(row.arrivalTime) }}</span>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="status" label="状态" min-width="100" align="center">
         <template #default="{ row }">
           <el-tag :type="getStatusTag(row.status)">
             {{ getStatusText(row.status) }}
@@ -37,44 +65,54 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="paymentStatus" label="支付状态" min-width="120">
+      <el-table-column prop="totalPrice" label="金额" min-width="100" align="right">
         <template #default="{ row }">
-          <el-tag :type="getPaymentStatusTag(row.paymentStatus || 'UNPAID')">
-            {{ getPaymentStatusText(row.paymentStatus || 'UNPAID') }}
-          </el-tag>
+          <span style="color: #f56c6c; font-weight: bold;">
+            ¥{{ row.totalPrice?.toFixed(2) || '0.00' }}
+          </span>
         </template>
       </el-table-column>
 
-      <el-table-column prop="totalPrice" label="订单金额" min-width="120">
+      <el-table-column prop="createTime" label="下单时间" min-width="160" align="center">
         <template #default="{ row }">
-          ¥{{ row.totalPrice?.toFixed(2) || '0.00' }}
+          {{ formatDateTime(row.createTime) }}
         </template>
       </el-table-column>
 
-      <el-table-column prop="createTime" label="创建时间" min-width="180">
+      <el-table-column label="操作" min-width="250" fixed="right" align="center">
         <template #default="{ row }">
-          {{ formatDate(row.createTime) }}
-        </template>
-      </el-table-column>
-
-      <el-table-column label="操作" min-width="200" fixed="right">
-        <template #default="{ row }">
-          <el-button
-              type="primary"
-              size="small"
-              link
-              @click="handleViewDetail(row)"
-          >
-            查看详情
+          <el-button link type="primary" size="small" @click="handleViewDetail(row)">
+            详情
           </el-button>
+
           <el-button
               v-if="row.status === 'PENDING'"
+              link
               type="success"
               size="small"
-              link
               @click="handlePay(row)"
           >
             去支付
+          </el-button>
+
+          <el-button
+              v-if="row.status === 'PENDING'"
+              link
+              type="warning"
+              size="small"
+              @click="handleCancel(row)"
+          >
+            取消
+          </el-button>
+
+          <el-button
+              v-if="['CANCELLED', 'REFUNDED', 'PAID'].includes(row.status)"
+              link
+              type="danger"
+              size="small"
+              @click="handleDelete(row)"
+          >
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -85,114 +123,184 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage, ElAlert } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+// 确保路径正确引用了你刚才修改的 orderService.js
 import { orderService } from '@/services/orderService'
 
 const router = useRouter()
 
-// 响应式数据
+// ------------------- 数据定义 -------------------
 const loading = ref(false)
 const orders = ref([])
 const hasConnectionError = ref(false)
 
-// 获取订单状态标签
+// ------------------- 状态处理工具函数 -------------------
 const getStatusTag = (status) => {
-  const statusMap = {
-    'PENDING': 'warning',   // PENDING 通常是待处理/待支付，用 warning 黄色比较合适
-    'CONFIRMED': 'success',
-    'CANCELLED': 'info',    // 取消通常用灰色 info
-    'REFUNDED': 'danger'
+  const map = {
+    'PENDING': 'warning',   // 待支付：黄
+    'PAID': 'success',      // 已支付：绿
+    'CANCELLED': 'info',    // 已取消：灰
+    'REFUNDED': 'danger'    // 已退款：红
   }
-  return statusMap[status] || ''
+  return map[status] || ''
 }
 
-// 获取订单状态文本
 const getStatusText = (status) => {
-  const statusMap = {
-    'PENDING': '待支付', // 根据你的上下文，PENDING 往往意味着还没付钱
-    'CONFIRMED': '已出票',
+  const map = {
+    'PENDING': '待支付',
+    'PAID': '已支付',
     'CANCELLED': '已取消',
     'REFUNDED': '已退款'
   }
-  return statusMap[status] || status || '未知'
+  return map[status] || status
 }
 
-// 获取支付状态标签
-const getPaymentStatusTag = (paymentStatus) => {
-  const statusMap = {
-    'UNPAID': 'warning',
-    'PAID': 'success',
-    'REFUNDED': 'info',
-    'PARTIALLY_REFUNDED': 'warning'
-  }
-  return statusMap[paymentStatus] || ''
+// 时间格式化：只显示 HH:mm
+const formatTime = (dateStr) => {
+  if (!dateStr) return ''
+  const date = new Date(dateStr.replace(' ', 'T'))
+  return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
 }
 
-// 获取支付状态文本
-const getPaymentStatusText = (paymentStatus) => {
-  const statusMap = {
-    'UNPAID': '未支付',
-    'PAID': '已支付',
-    'REFUNDED': '已退款',
-    'PARTIALLY_REFUNDED': '部分退款'
-  }
-  return statusMap[paymentStatus] || paymentStatus || '未知'
+// 日期时间格式化：YYYY-MM-DD HH:mm
+const formatDateTime = (dateStr) => {
+  if (!dateStr) return '-'
+  const date = new Date(dateStr.replace(' ', 'T'))
+  return date.toLocaleString('zh-CN', { hour12: false })
 }
 
-// 格式化日期
-const formatDate = (date) => {
-  if (!date) return '-'
-  // 解决部分浏览器无法解析 'YYYY-MM-DD HH:mm:ss' 格式的问题（替换空格为T）
-  const safeDate = typeof date === 'string' ? date.replace(' ', 'T') : date;
-  return new Date(safeDate).toLocaleString('zh-CN')
-}
+// ------------------- 核心业务逻辑 -------------------
 
-// 加载订单列表
+// 1. 加载订单列表
 const loadOrders = async () => {
   loading.value = true
+  hasConnectionError.value = false
   try {
-    const response = await orderService.getOrderList({
-      userId: 1 // 临时使用1，后续从token中获取
-    })
-    orders.value = Array.isArray(response.data) ? response.data : []
-  } catch (error) {
-    console.error('Load orders error:', error)
-    orders.value = []
+    // 这里的 userId 暂时写死，实际应从 Store 或 Token 解析
+    const res = await orderService.getOrderList({ userId: 1 })
 
-    if (error.request && !error.response) {
+    // 兼容后端 Result 包装: {code: 200, msg: "...", data: [...]}
+    if (res.code === 200) {
+      orders.value = res.data || []
+    } else {
+      ElMessage.error(res.msg || '获取列表失败')
+    }
+  } catch (error) {
+    console.error('API Error:', error)
+    if (error.code === 'ERR_NETWORK') {
       hasConnectionError.value = true
     } else {
-      hasConnectionError.value = false
+      ElMessage.error('网络请求异常')
     }
   } finally {
     loading.value = false
   }
 }
 
-// 查看详情
-const handleViewDetail = (order) => {
-  const pnrNumber = order.pnrNumber || order.orderId
-  if (!pnrNumber) {
-    ElMessage.error('订单PNR号不存在')
-    return
-  }
+// 2. 跳转详情
+const handleViewDetail = (row) => {
+  // 使用 PNR 跳转
   router.push({
     name: 'OrderDetail',
-    params: { pnr: pnrNumber }
+    params: { pnr: row.pnrNumber }
   })
 }
 
-// 去支付
-const handlePay = (order) => {
-  // 后端JSON暂时没返回 payUrl，这里做个防御性提示
-  if (order.payUrl) {
-    window.open(order.payUrl, '_blank')
-  } else {
-    ElMessage.success('模拟支付跳转...')
+// 3. 去支付 (核心修改：调用后端获取最新链接)
+const handlePay = async (row) => {
+  try {
+    loading.value = true
+    // 调用后端新接口 /api/orders/pay-url
+    const res = await orderService.getPayUrl(row.pnrNumber)
+
+    if (res.code === 200 && res.data) {
+      // 在新窗口打开支付链接
+      window.open(res.data, '_blank')
+
+      // 弹窗提示用户刷新状态
+      ElMessageBox.confirm(
+          '请在新打开的页面完成支付。支付完成后，请点击“已完成支付”刷新状态。',
+          '支付确认',
+          {
+            confirmButtonText: '已完成支付',
+            cancelButtonText: '稍后处理',
+            type: 'info',
+          }
+      ).then(() => {
+        // 用户点击确认后，刷新列表查看最新状态
+        loadOrders()
+      }).catch(() => {})
+
+    } else {
+      ElMessage.error(res.msg || '无法获取支付链接')
+    }
+  } catch (error) {
+    ElMessage.error('请求支付链接失败')
+  } finally {
+    loading.value = false
   }
 }
 
-// 组件挂载时加载数据
+// 4. 取消订单
+const handleCancel = (row) => {
+  ElMessageBox.confirm(
+      `确定要取消订单 ${row.pnrNumber} 吗？取消后座位将释放。`,
+      '取消提示',
+      {
+        confirmButtonText: '确认取消',
+        cancelButtonText: '再想想',
+        type: 'warning',
+      }
+  ).then(async () => {
+    try {
+      loading.value = true
+      // 调用后端取消接口
+      const res = await orderService.cancelOrder(row.orderId)
+      if (res.code === 200) {
+        ElMessage.success('订单已取消')
+        loadOrders() // 刷新列表
+      } else {
+        ElMessage.error(res.msg || '取消失败')
+      }
+    } catch (error) {
+      ElMessage.error('操作失败')
+    } finally {
+      loading.value = false
+    }
+  })
+}
+
+// 5. 删除订单
+const handleDelete = (row) => {
+  ElMessageBox.confirm(
+      '确定要删除该订单记录吗？此操作不可恢复。',
+      '删除警告',
+      {
+        confirmButtonText: '确认删除',
+        cancelButtonText: '取消',
+        type: 'error',
+      }
+  ).then(async () => {
+    try {
+      loading.value = true
+      // 调用后端删除接口
+      const res = await orderService.deleteOrder(row.orderId)
+      if (res.code === 200) {
+        ElMessage.success('删除成功')
+        // 直接从前端列表移除，省去一次请求
+        orders.value = orders.value.filter(item => item.orderId !== row.orderId)
+      } else {
+        ElMessage.error(res.msg || '删除失败')
+      }
+    } catch (error) {
+      ElMessage.error('操作失败')
+    } finally {
+      loading.value = false
+    }
+  })
+}
+
+// 初始化
 onMounted(() => {
   loadOrders()
 })
@@ -200,31 +308,60 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .order-list-container {
-  padding: 20px;
-  background: #f5f5f5;
+  padding: 24px;
+  background: #f0f2f5; /* 浅灰色背景，更现代 */
   min-height: calc(100vh - 60px);
 
   .page-header {
-    margin-bottom: 20px;
-    background: white;
-    padding: 20px;
+    background: #fff;
+    padding: 20px 24px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 
-    h1 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 600;
-      color: #303133;
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        color: #1f1f1f;
+        font-weight: 600;
+      }
     }
   }
 
-  .el-table {
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
+  /* 优化表格内的行程信息展示 */
+  .trip-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 10px;
+
+    .station {
+      display: flex;
+      flex-direction: column;
+
+      .name {
+        font-weight: bold;
+        font-size: 14px;
+        color: #303133;
+      }
+
+      .time {
+        font-size: 12px;
+        color: #909399;
+        margin-top: 4px;
+      }
+    }
+
+    .arrow {
+      color: #DCDFE6;
+      font-weight: bold;
+      margin: 0 10px;
+    }
   }
 }
 </style>

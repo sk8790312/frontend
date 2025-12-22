@@ -76,7 +76,7 @@
 ### 1. 从Schedules模块跳转
 当用户从 Schedules and User panel 模块跳转时：
 ```
-http://localhost:5173/booking.html?trainNumber=G101&departureStation=Beijing&arrivalStation=Shanghai&departureTime=2025-12-19T08:00:00&arrivalTime=2025-12-19T13:00:00&price=100.00&userId=user_1001
+http://localhost:5173/booking.html?trainNumber=G101&departureStation=Beijing&arrivalStation=Shanghai&departureTime=2025-12-19T08:00:00&arrivalTime=2025-12-19T13:00:00&price=100.00&userId=user_1
 ```
 
 系统会自动重定向到创建订单页面，并携带所有查询参数。

@@ -27,18 +27,11 @@ apiClient.interceptors.request.use(
 
 // 响应拦截器
 apiClient.interceptors.response.use(
-  (response) => {
-    if (response.data && typeof response.data === 'object' && 'code' in response.data) {
-      if (response.data.code === 200 || response.data.code === 0) {
-        return { ...response, data: response.data.data }
-      } else {
-        const error = new Error(response.data.message || '请求失败')
-        error.response = response
-        return Promise.reject(error)
-      }
-    }
-    return response
-  },
+    (response) => {
+      // 【关键点】直接返回 response.data (即后端的 Result 对象: {code, msg, data})
+      // 不要在这里 return response.data.data，否则组件里拿不到 code
+      return response.data
+    },
   (error) => {
     if (error.response) {
       switch (error.response.status) {
@@ -86,12 +79,14 @@ export const orderService = {
   },
 
   /**
-   * 获取订单详情
-   * @param {String|Number} orderId - 订单ID
-   * @returns {Promise}
+   * 获取订单详情 (通过ID)
+   * GET /api/order/detail?orderId=...
+   * @param {Number|String} orderId
    */
   getOrderDetail(orderId) {
-    return apiClient.get(`/order/${orderId}`)
+    return apiClient.get('/order/detail', {
+      params: { orderId }
+    })
   },
 
   /**
@@ -101,6 +96,51 @@ export const orderService = {
    */
   getOrderByPnr(pnrNumber) {
     return apiClient.get(`/order/pnr/${pnrNumber}`)
+  },
+
+  /**
+   * 获取支付链接 (去支付)
+   * GET /api/order/pay-url?pnrNumber=...
+   * @param {String} pnrNumber
+   */
+  getPayUrl(pnrNumber) {
+    return apiClient.get('/order/pay-url', {
+      params: { pnrNumber }
+    })
+  },
+
+  /**
+   * 同步/查询支付状态 (我已支付)
+   * POST /api/order/sync-status?pnrNumber=...
+   * @param {String} pnrNumber
+   */
+  syncPaymentStatus(pnrNumber) {
+    // POST 请求，参数通过 query params 传递 (匹配后端 @RequestParam)
+    return apiClient.post('/order/sync-status', null, {
+      params: { pnrNumber }
+    })
+  },
+
+  /**
+   * 取消订单
+   * POST /api/order/cancel?orderId=...
+   * @param {Number|String} orderId
+   */
+  cancelOrder(orderId) {
+    return apiClient.post('/order/cancel', null, {
+      params: { orderId }
+    })
+  },
+
+  /**
+   * 删除订单
+   * POST /api/order/delete?orderId=...
+   * @param {Number|String} orderId
+   */
+  deleteOrder(orderId) {
+    return apiClient.post('/order/delete', null, {
+      params: { orderId }
+    })
   }
 }
 

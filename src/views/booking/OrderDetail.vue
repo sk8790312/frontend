@@ -47,7 +47,7 @@
 
           <el-descriptions :column="2" border>
             <el-descriptions-item label="PNR号">
-              <span class="pnr-number">{{ order.orderId || order.pnrNumber }}</span>
+              <span class="pnr-number">{{ order.pnrNumber }}</span>
             </el-descriptions-item>
             <el-descriptions-item label="车次">
               <el-tag type="info" size="large">{{ order.trainNumber }}</el-tag>
@@ -66,7 +66,7 @@
               <span class="amount">¥{{ (order.totalPrice || order.totalAmount)?.toFixed(2) || '0.00' }}</span>
             </el-descriptions-item>
             <el-descriptions-item label="创建时间">
-              {{ formatDate(order.createdAt) }}
+              {{ formatDate(order.createTime) }}
             </el-descriptions-item>
             <el-descriptions-item label="出发站" v-if="order.departureStation">
               {{ order.departureStation }}
@@ -89,13 +89,10 @@
             <span>乘客信息</span>
           </template>
 
-          <el-table :data="order.passengers || []" stripe>
-            <el-table-column prop="name" label="姓名" min-width="120" />
-            <el-table-column prop="type" label="类型" min-width="100">
-              <template #default="{ row }">
-                <el-tag>{{ getPassengerTypeText(row.type) }}</el-tag>
-              </template>
-            </el-table-column>
+          <el-table :data="order.tickets || []" stripe>
+
+            <el-table-column prop="passengerName" label="姓名" min-width="120" />
+
             <el-table-column prop="idCardNumber" label="身份证号" min-width="180">
               <template #default="{ row }">
                 {{ maskIdCard(row.idCardNumber) }}
@@ -351,19 +348,19 @@ const generateTicketHtml = (orderData) => {
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pnrNumber)}`
 
   // 为每个乘客生成一张电子票
-  const passengers = orderData.passengers || []
+  const tickets = orderData.tickets || []
   
-  if (passengers.length === 0) {
+  if (tickets.length === 0) {
     return '<html><body><p>没有乘客信息</p></body></html>'
   }
 
   // 生成单张电子票HTML
-  const generateSingleTicket = (passenger) => {
-    const passengerName = passenger.name || ''
-    const idCardNumber = passenger.idCardNumber || ''
+  const generateSingleTicket = (ticket) => {
+    const passengerName = ticket.passengerName || ''
+    const idCardNumber = ticket.idCardNumber || ''
     // 根据API文档，PassengerDTO使用seatNumber和ticketPrice，但为了兼容也支持seat和price
-    const seat = passenger.seatNumber || passenger.seat || '待分配'
-    const price = (passenger.ticketPrice || passenger.price || 0).toFixed(2)
+    const seat = ticket.seatNumber || ticket.seat || '待分配'
+    const price = (ticket.ticketPrice || ticket.price || 0).toFixed(2)
     
     // 格式化出发站和到达站：城市名 (时间)
     const fromStation = departureTime ? `${departureStation} (${departureTime})` : departureStation
