@@ -159,9 +159,6 @@ const formatDate = (date) => {
 const loadPassengers = async () => {
   loading.value = true
   try {
-    const response = await passengerService.getAllPassengers({
-      userId: 1 // 临时使用1，后续从token中获取
-    })
     // 后端返回格式：{ code: 200, message: "", data: [...] }
     // 响应拦截器已经处理，这里 response.data 就是数组
     passengers.value = Array.isArray(response.data) ? response.data : []

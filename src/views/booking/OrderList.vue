@@ -176,10 +176,20 @@ const loadOrders = async () => {
   loading.value = true
   hasConnectionError.value = false
   try {
-    // 这里的 userId 暂时写死，实际应从 Store 或 Token 解析
-    const res = await orderService.getOrderList({ userId: 1 })
+    // 【修改点】动态获取 userId
+    const currentUserId = localStorage.getItem('userId')
 
-    // 兼容后端 Result 包装: {code: 200, msg: "...", data: [...]}
+    if (!currentUserId) {
+      ElMessage.warning('未检测到用户信息，请先登录')
+      loading.value = false
+      // 这里可以做 router.push('/login')
+      return
+    }
+
+    // 传入真实的 userId
+    const res = await orderService.getOrderList({ userId: currentUserId })
+
+    // 兼容后端 Result 包装
     if (res.code === 200) {
       orders.value = res.data || []
     } else {

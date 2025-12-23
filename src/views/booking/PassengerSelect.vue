@@ -3,46 +3,41 @@
     <div class="page-header">
       <h1>选择乘客</h1>
       <div class="header-actions">
-        <el-button 
-          type="primary" 
-          @click="handleAdd"
-          style="margin-right: 10px"
-        >
+        <el-button type="success" @click="handleAdd">
           <el-icon><Plus /></el-icon>
-          添加乘客
+          新增乘客
         </el-button>
+
         <el-button @click="handleCancel">取消</el-button>
-        <el-button 
-          type="primary" 
-          @click="handleConfirm"
-          :disabled="selectedPassengers.length === 0"
+        <el-button
+            type="primary"
+            @click="handleConfirm"
+            :disabled="selectedPassengers.length === 0"
         >
           确认选择 ({{ selectedPassengers.length }})
         </el-button>
       </div>
     </div>
 
-    <!-- 后端连接错误提示 -->
     <el-alert
-      v-if="hasConnectionError"
-      title="后端服务未启动"
-      type="warning"
-      :closable="false"
-      show-icon
-      style="margin-bottom: 20px"
+        v-if="hasConnectionError"
+        title="后端服务未启动"
+        type="warning"
+        :closable="false"
+        show-icon
+        style="margin-bottom: 20px"
     >
       <template #default>
         <p style="margin: 0;">无法连接到后端服务器，请确认后端服务是否在 <strong>http://localhost:8081</strong> 运行。</p>
       </template>
     </el-alert>
 
-    <!-- 搜索栏 -->
     <div class="search-bar">
       <el-input
-        v-model="searchQuery"
-        placeholder="搜索乘客姓名、身份证号或手机号"
-        clearable
-        style="width: 300px"
+          v-model="searchQuery"
+          placeholder="搜索乘客姓名、身份证号或手机号"
+          clearable
+          style="width: 300px"
       >
         <template #prefix>
           <el-icon><Search /></el-icon>
@@ -50,14 +45,14 @@
       </el-input>
     </div>
 
-    <!-- 乘客列表表格 -->
     <el-table
         ref="passengerTableRef"
-      v-loading="loading"
-      :data="filteredPassengers"
-      stripe
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
+        v-loading="loading"
+        :data="filteredPassengers"
+        stripe
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+        row-key="id"
     >
       <el-table-column type="selection" width="55" />
       <el-table-column prop="name" label="姓名" min-width="120" />
@@ -73,23 +68,22 @@
       </el-table-column>
     </el-table>
 
-    <!-- 添加乘客对话框 -->
     <PassengerForm
-      v-model="dialogVisible"
-      :passenger="currentPassenger"
-      :is-edit="isEdit"
-      @success="handleFormSuccess"
+        v-model="dialogVisible"
+        :is-edit="false"
+        :user-id="currentUserId"
+        @success="handleFormSuccess"
     />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue'
-import {useRoute, useRouter} from 'vue-router'
-import { ElMessage, ElAlert } from 'element-plus'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import { Search, Plus } from '@element-plus/icons-vue'
-import PassengerForm from './PassengerForm.vue'
 import { passengerService } from '@/services/passengerService'
+import PassengerForm from './PassengerForm.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -100,66 +94,67 @@ const passengers = ref([])
 const searchQuery = ref('')
 const selectedPassengers = ref([])
 const hasConnectionError = ref(false)
-const passengerTableRef = ref(null)
+const passengerTableRef = ref(null) // 表格 Ref，用于调用 toggleRowSelection
+
+// 控制弹窗和用户ID
 const dialogVisible = ref(false)
-const currentPassenger = ref(null)
-const isEdit = ref(false)
+const currentUserId = ref(null)
 
 // 计算属性：过滤后的乘客列表
 const filteredPassengers = computed(() => {
   if (!searchQuery.value) {
     return passengers.value
   }
-  
+
   const query = searchQuery.value.toLowerCase()
-  return passengers.value.filter(passenger => 
-    passenger.name?.toLowerCase().includes(query) ||
-    passenger.idCardNumber?.toLowerCase().includes(query) ||
-    passenger.phone?.toLowerCase().includes(query)
+  return passengers.value.filter(passenger =>
+      passenger.name?.toLowerCase().includes(query) ||
+      passenger.idCardNumber?.toLowerCase().includes(query) ||
+      passenger.phone?.toLowerCase().includes(query)
   )
 })
 
-// 获取乘客类型标签
 const getPassengerTypeTag = (type) => {
-  const typeMap = {
-    1: 'success', // 成人
-    2: 'info'     // 学生
-  }
+  const typeMap = { 1: 'success', 2: 'info' }
   return typeMap[type] || ''
 }
 
-// 获取乘客类型文本
 const getPassengerTypeText = (type) => {
-  const typeMap = {
-    1: '成人',
-    2: '学生'
-  }
+  const typeMap = { 1: '成人', 2: '学生' }
   return typeMap[type] || `未知(${type})`
 }
 
-// 获取userId（从URL参数或使用默认值）
 const getUserId = () => {
   const query = router.currentRoute.value.query
   let userId = query.userId
+
   if (userId && typeof userId === 'string' && userId.startsWith('user_')) {
     userId = userId.replace('user_', '')
   }
-  return userId ? parseInt(userId) : 1
+
+  if (!userId) {
+    userId = localStorage.getItem('userId')
+  }
+
+  return userId ? userId : null
 }
 
+// 【关键逻辑】恢复选中状态
 const restoreSelection = () => {
-  // 1. 获取 URL 中的 ID 参数
-  const idsStr = route.query.selectedPassengerIds
-  if (!idsStr) return
+  const selectedIdsStr = route.query.selectedPassengerIds
+  if (!selectedIdsStr || !passengerTableRef.value) return
 
-  // 2. 只需要分割成字符串数组即可（不需要 parseInt，转成字符串对比更稳健）
-  const targetIds = idsStr.split(',')
+  // 将 URL 参数里的 "1,2,3" 转为数组 [1, 2, 3]
+  // 注意：后端返回的 ID 可能是 Long(Number)，URL 参数是 String，这里统一转 Number 比较
+  const selectedIds = selectedIdsStr.split(',').map(id => {
+    const num = Number(id)
+    return isNaN(num) ? id : num
+  })
 
-  // 3. 遍历
+  // 遍历当前表格数据，如果 ID 在选中列表中，则勾选
   passengers.value.forEach(row => {
-    // 【关键修改】把 row.id 也转成字符串进行对比，避免 类型(1 !== "1") 问题
-    if (targetIds.includes(String(row.id))) {
-      passengerTableRef.value?.toggleRowSelection(row, true)
+    if (selectedIds.includes(row.id)) {
+      passengerTableRef.value.toggleRowSelection(row, true)
     }
   })
 }
@@ -169,45 +164,59 @@ const loadPassengers = async () => {
   loading.value = true
   try {
     const userId = getUserId()
+    currentUserId.value = userId
+
+    if (!userId) {
+      ElMessage.error('无法获取用户ID，无法加载乘客列表')
+      passengers.value = []
+      loading.value = false
+      return
+    }
+
     const response = await passengerService.getAllPassengers({
       userId: userId
     })
     passengers.value = Array.isArray(response.data) ? response.data : []
+
+    // 【关键步骤】等待 DOM 更新后，执行恢复选中逻辑
     await nextTick()
     restoreSelection()
 
   } catch (error) {
     console.error('Load passengers error:', error)
-    passengers.value = []
-    
     if (error.request && !error.response) {
       hasConnectionError.value = true
-      ElMessage.error('无法连接到后端服务器，请确认后端服务是否在 http://localhost:8081 运行')
-    } else {
-      hasConnectionError.value = false
-      ElMessage.error('加载乘客列表失败: ' + (error.message || '未知错误'))
     }
   } finally {
     loading.value = false
   }
 }
 
-// 选择变化处理
 const handleSelectionChange = (selection) => {
   selectedPassengers.value = selection
 }
 
-// 确认选择
+const handleAdd = () => {
+  if (!currentUserId.value) {
+    ElMessage.error('无法获取用户身份，请重新登录')
+    return
+  }
+  dialogVisible.value = true
+}
+
+const handleFormSuccess = () => {
+  dialogVisible.value = false
+  loadPassengers()
+}
+
 const handleConfirm = () => {
   if (selectedPassengers.value.length === 0) {
     ElMessage.warning('请至少选择一个乘客')
     return
   }
-  
-  // 返回选中的乘客ID数组
+
   const passengerIds = selectedPassengers.value.map(p => p.id)
-  
-  // 通过路由参数返回
+
   router.push({
     name: 'CreateOrder',
     query: {
@@ -217,26 +226,10 @@ const handleConfirm = () => {
   })
 }
 
-// 取消
 const handleCancel = () => {
   router.back()
 }
 
-// 添加乘客
-const handleAdd = () => {
-  currentPassenger.value = null
-  isEdit.value = false
-  dialogVisible.value = true
-}
-
-// 表单提交成功回调
-const handleFormSuccess = () => {
-  dialogVisible.value = false
-  // 刷新乘客列表
-  loadPassengers()
-}
-
-// 组件挂载时加载数据
 onMounted(() => {
   loadPassengers()
 })
@@ -288,4 +281,3 @@ onMounted(() => {
   }
 }
 </style>
-

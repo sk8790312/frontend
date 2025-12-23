@@ -1,32 +1,32 @@
 <template>
   <el-dialog
-    v-model="dialogVisible"
-    :title="isEdit ? '编辑乘客' : '添加乘客'"
-    width="600px"
-    :close-on-click-modal="false"
-    @close="handleClose"
+      v-model="dialogVisible"
+      :title="isEdit ? '编辑乘客' : '添加乘客'"
+      width="600px"
+      :close-on-click-modal="false"
+      @close="handleClose"
   >
     <el-form
-      ref="formRef"
-      :model="form"
-      :rules="rules"
-      label-width="100px"
-      label-position="left"
+        ref="formRef"
+        :model="form"
+        :rules="rules"
+        label-width="100px"
+        label-position="left"
     >
       <el-form-item label="姓名" prop="name">
         <el-input
-          v-model="form.name"
-          placeholder="请输入乘客姓名"
-          maxlength="50"
-          show-word-limit
+            v-model="form.name"
+            placeholder="请输入乘客姓名"
+            maxlength="50"
+            show-word-limit
         />
       </el-form-item>
 
       <el-form-item label="证件类型" prop="idCardType">
         <el-select
-          v-model="form.idCardType"
-          placeholder="请选择证件类型"
-          style="width: 100%"
+            v-model="form.idCardType"
+            placeholder="请选择证件类型"
+            style="width: 100%"
         >
           <el-option label="身份证" value="身份证" />
         </el-select>
@@ -34,26 +34,26 @@
 
       <el-form-item label="证件号码" prop="idCardNumber">
         <el-input
-          v-model="form.idCardNumber"
-          placeholder="请输入证件号码"
-          maxlength="18"
-          @blur="validateIdCard"
+            v-model="form.idCardNumber"
+            placeholder="请输入证件号码"
+            maxlength="18"
+            @blur="validateIdCard"
         />
       </el-form-item>
 
       <el-form-item label="手机号" prop="phone">
         <el-input
-          v-model="form.phone"
-          placeholder="请输入11位手机号"
-          maxlength="11"
+            v-model="form.phone"
+            placeholder="请输入11位手机号"
+            maxlength="11"
         />
       </el-form-item>
 
       <el-form-item label="乘客类型" prop="type">
         <el-select
-          v-model="form.type"
-          placeholder="请选择乘客类型"
-          style="width: 100%"
+            v-model="form.type"
+            placeholder="请选择乘客类型"
+            style="width: 100%"
         >
           <el-option label="成人" :value="1" />
           <el-option label="学生" :value="2" />
@@ -78,17 +78,13 @@ import { ElMessage } from 'element-plus'
 import { passengerService } from '@/services/passengerService'
 
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false
-  },
-  passenger: {
-    type: Object,
-    default: null
-  },
-  isEdit: {
-    type: Boolean,
-    default: false
+  modelValue: { type: Boolean, default: false },
+  passenger: { type: Object, default: null },
+  isEdit: { type: Boolean, default: false },
+  // 【修改点】移除 default: 1
+  userId: {
+    type: [Number, String], // 兼容 Long 类型的字符串形式
+    required: true          // 标记为必传
   }
 })
 
@@ -141,12 +137,12 @@ const validateIdCard = () => {
   }
 }
 
-// 重置表单（必须在 watch 之前定义）
+// 重置表单
 const resetForm = () => {
   Object.assign(form, {
     id: null,
     name: '',
-    type: 1, // 1=成人, 2=学生
+    type: 1,
     idCardType: '身份证',
     idCardNumber: '',
     phone: ''
@@ -154,13 +150,13 @@ const resetForm = () => {
   formRef.value?.clearValidate()
 }
 
-// 监听乘客数据变化，填充表单
+// 监听乘客数据变化
 watch(() => props.passenger, (newPassenger) => {
   if (newPassenger) {
     Object.assign(form, {
       id: newPassenger.id || null,
       name: newPassenger.name || '',
-      type: newPassenger.type || 1, // 1=成人, 2=学生
+      type: newPassenger.type || 1,
       idCardType: newPassenger.idCardType || '身份证',
       idCardNumber: newPassenger.idCardNumber || '',
       phone: newPassenger.phone || ''
@@ -179,16 +175,21 @@ const handleClose = () => {
 // 提交表单
 const handleSubmit = async () => {
   if (!formRef.value) return
-  
+
   try {
     await formRef.value.validate()
+
+    // 安全检查
+    if (!props.userId) {
+      ElMessage.error('系统错误：缺少用户ID')
+      return
+    }
+
     submitting.value = true
 
-    // 准备提交数据（只包含后端需要的字段）
-    // userId隐式设置为1，后续从token中获取
     const submitData = {
       id: form.id || undefined,
-      userId: 1, // 临时使用1，后续从token中获取
+      userId: props.userId, // 使用传入的真实 ID
       name: form.name,
       type: form.type,
       idCardType: form.idCardType,
@@ -197,12 +198,12 @@ const handleSubmit = async () => {
     }
 
     if (props.isEdit) {
-      // 更新乘客（需要包含 id）
+      // 更新
       submitData.id = form.id
       await passengerService.updatePassenger(submitData)
       ElMessage.success('更新成功')
     } else {
-      // 创建乘客（不需要 id）
+      // 创建
       delete submitData.id
       await passengerService.createPassenger(submitData)
       ElMessage.success('创建成功')
@@ -212,7 +213,6 @@ const handleSubmit = async () => {
     handleClose()
   } catch (error) {
     if (error !== false) {
-      // 验证失败时 error 为 false，其他情况为实际错误
       ElMessage.error((props.isEdit ? '更新' : '创建') + '失败: ' + (error.message || '未知错误'))
       console.error('Submit passenger error:', error)
     }
@@ -239,4 +239,3 @@ const handleSubmit = async () => {
   width: 100%;
 }
 </style>
-
